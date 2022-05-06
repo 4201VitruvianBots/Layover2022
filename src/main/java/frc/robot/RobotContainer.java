@@ -30,6 +30,7 @@ public class RobotContainer {
   
   public void initializeSubsystems() {
 
+    m_fieldSim.initSim();
   }
   
   /**
@@ -68,6 +69,10 @@ public class RobotContainer {
     return m_autoChooser.getSelected();
   }
 
+  public void periodic() {
+    m_fieldSim.periodic();
+  }
+  
   public void disabledInit() {
     
   }
@@ -75,7 +80,14 @@ public class RobotContainer {
   public void disabledPeriodic() {
     
   }
+  
+  public void autonomousInit() {
+    
+  }
 
+  public void autonomousPeriodic() {
+    
+  }
   public void teleopInit() {
     
   }
@@ -83,23 +95,12 @@ public class RobotContainer {
   public void teleopPeriodic() {
     
   }
-
-  public void autonomousInit() {
-    
-  }
-
-  public void autonomousPeriodic() {
-  }
-  
-  public void updateFieldSim() {
-    m_fieldSim.periodic();
-  }
   
   public void simulationInit() {
-    m_fieldSim.initSim();
+    
   }
-
+  
   public void simulationPeriodic() {
-    m_fieldSim.simulationPeriodic();
-  }  
+    
+  }
 }
