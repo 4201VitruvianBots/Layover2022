@@ -7,7 +7,7 @@ package frc.robot.simulation;
 public class FieldSim {
   private final SwerveDrive m_swerveDrive;
   
-  private Field2d m_field2d;
+  private Field2d m_field2d = new Field2d();
   
   public FieldSim(SwerveDrive swerveDrive) {
     m_swerveDrive = swerveDrive;
