@@ -4,6 +4,11 @@
 
 package frc.robot.simulation;
 
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
+import frc.robot.simulation.SimConstants.*;
+
 public class FieldSim {
   private final SwerveDrive m_swerveDrive;
   
