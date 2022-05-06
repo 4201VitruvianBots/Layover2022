@@ -20,6 +20,7 @@ public final class Constants {
     public static final int leftJoystick = 0;
     public static final int rightJoystick = 1;
     public static final int xBoxContorller = 2;
+    public static final int testController = 4;
   }
   
   private final class CAN {
