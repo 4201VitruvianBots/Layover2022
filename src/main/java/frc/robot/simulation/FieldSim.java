@@ -21,7 +21,7 @@ public class FieldSim {
   }
   
   private void updateRobotPoses() {
-    m_field2d.setRobotPose(m_swerveDrive.getPose());
+    
   }
   
   public void periodic() {
