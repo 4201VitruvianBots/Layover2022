@@ -5,18 +5,34 @@
 package frc.robot.simulation;
 
 public class FieldSim {
+  private final SwerveDrive m_swerveDrive;
+  
+  private Field2d m_field2d;
   
   public FieldSim(SwerveDrive swerveDrive) {
+    m_swerveDrive = swerveDrive;
   }
 
   public void initSim() {
   }
   
-  private void updateSmartDashboard() {
-    
+  public Field2d getField2d() {
+    return m_field2d;
+  }
+  
+  private void updateRobotPoses() {
+    m_field2d.setRobotPose(m_swerveDrive.getPose());
   }
   
   public void periodic() {
-    updateSmartDashboard();
+    updateRobotPoses();
+    
+    if(RobotBase.isSimulation())
+      simulationPeriodic();
+    
+    SmartDashboard.putData("Field2d", m_field2d);
+  }
+  
+  public void simulationPeriodic() {
   }
 }
