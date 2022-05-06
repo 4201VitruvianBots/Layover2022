@@ -59,10 +59,17 @@ public final class Constants {
   private final class SwerveModule {
     public static final double kDriveMotorGearRatio = 6.12;
     public static final double kTurningMotorGearRatio = 12.8;
+    public static final double kWheelDiameterMeters = Units.inchesToMeters(3.94);
     public static final int kFalconEncoderCPR = 2048;
     public static final int kCANCoderCPR = 4096;
     
-    public static final double kTurningMotorDistancePerPulse = 360.0 / kFalconEncoderCPR;
+    public static final DCMotor kDriveGearbox = DCMotor.getFalcon500(1);
+    public static final DCMotor kTurnGearbox = DCMotor.getFalcon500(1);
+    
+    public static final double kDriveMotorDistancePerPulse = 
+        (kWheelDiameterMeters * Math.PI) / (kFalconEncoderCPR * kDriveMotorGearRatio);
+    public static final double kTurningMotorDistancePerPulse = 
+        360.0 / (kFalconEncoderCPR * kTurningMotorGearRatio);
     public static final double kTurningEncoderDistancePerPulse = 360.0 / kCANCoderCPR;
 
     public static final double ksDriveVoltSecondsPerMeter = 0.667 / 12;
