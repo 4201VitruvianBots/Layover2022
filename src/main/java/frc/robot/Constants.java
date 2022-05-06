@@ -18,14 +18,14 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   
-  public final class USB {
+  public static final class USB {
     public static final int leftJoystick = 0;
     public static final int rightJoystick = 1;
     public static final int xBoxController = 2;
     public static final int testController = 4;
   }
   
-  public final class CAN {
+  public static final class CAN {
     public static final int pidgeon = 9;
     
     public static final int frontLeftDriveMotor = 20;
@@ -38,7 +38,7 @@ public final class Constants {
     public static final int backRightTurnMotor = 27;
   }
   
-  public final class SwerveDrive {
+  public static final class SwerveDrive {
     public static final double kTrackWidth = Units.inchesToMeters(30);
     public static final double kWheelBase = Units.inchesToMeters(30);
     
@@ -58,7 +58,7 @@ public final class Constants {
             kMaxRotationRadiansPerSecond, kMaxRotationRadiansPerSecondSquared);
   }
   
-  public final class SwerveModule {
+  public static final class SwerveModule {
     public static final double kDriveMotorGearRatio = 6.12;
     public static final double kTurningMotorGearRatio = 12.8;
     public static final double kWheelDiameterMeters = Units.inchesToMeters(3.94);
