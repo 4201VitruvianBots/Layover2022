@@ -20,6 +20,17 @@ public class RobotContainer {
   
   private final FieldSim m_fieldSim = new FieldSim(m_swerveDrive);
   
+  static Joystick leftJoystick = new Joystick(Constants.USB.leftJoystick);
+  static Joystick rightJoystick = new Joystick(Constants.USB.rightJoystick);
+  static XboxController xBoxController = new XboxController(Constants.USB.xBoxController);
+  static XboxController testController = new XboxController(Constants.USB.testController);
+  
+  public Button[] leftButtons = new Button[2];
+  public Button[] rightButtons = new Button[2];
+  public Button[] xBoxButtons = new Button[10];
+  public Button[] xBoxPOVButtons = new Button[4];
+  public Button xBoxLeftTrigger, xBoxRightTrigger;
+  
   public RobotContainer() {
     initializeSubsystems();
     initializeAutoChooser();
