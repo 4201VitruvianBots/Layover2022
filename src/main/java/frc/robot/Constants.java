@@ -54,10 +54,10 @@ public final class Constants {
     public static final double kWheelBase = Units.inchesToMeters(30);
 
     public static final SwerveModuleMap<Translation2d> kModuleTranslations = SwerveModuleMap.of(
-      new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-      new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-      new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-      new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
+      ModulePosition.FRONT_LEFT, new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+      ModulePosition.FRONT_RIGHT, new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+      ModulePosition.BACK_LEFT, new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+      ModulePosition.BACK_RIGHT, new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
     );
 
     public static final SwerveDriveKinematics kSwerveKinematics =
@@ -88,6 +88,7 @@ public final class Constants {
     public static final class SwerveModuleMap<V> extends HashMap<ModulePosition, V> {
       public SwerveModuleMap() {}
 
+      // This should only really be used to process the output of another function
       @SafeVarargs
       public static <V> SwerveModuleMap<V> of(V... values) {
         SwerveModuleMap<V> map = new SwerveModuleMap<>();
@@ -99,10 +100,15 @@ public final class Constants {
 
       public static <V> SwerveModuleMap<V> of(Map<ModulePosition, V> mapIn) {
         SwerveModuleMap<V> mapOut = new SwerveModuleMap<>();
-        for (ModulePosition i : ModulePosition.values()) {
+        for (ModulePosition i : mapIn.keySet()) {
           mapOut.put(i, mapIn.get(i));
         }
         return mapOut;
+      }
+
+      // For readability on declaration
+      public static <V> SwerveModuleMap<V> of(ModulePosition k1, V v1, ModulePosition k2, V v2, ModulePosition k3, V v3, ModulePosition k4, V v4) {
+        return SwerveModuleMap.of(Map.of(k1,v1,k2,v2,k3,v3,k4,v4));
       }
     }
   }
