@@ -110,6 +110,15 @@ public final class Constants {
       public static <V> SwerveModuleMap<V> of(ModulePosition k1, V v1, ModulePosition k2, V v2, ModulePosition k3, V v3, ModulePosition k4, V v4) {
         return SwerveModuleMap.of(Map.of(k1,v1,k2,v2,k3,v3,k4,v4));
       }
+
+      // Use this instead of values() to keep the modules in the right order
+      public List<V> orderedValues() {
+        ArrayList<V> list = new ArrayList<>();
+        for (ModulePosition i : ModulePosition.values()) {
+          list.add(get(i));
+        }
+        return list;
+      }
     }
   }
 
