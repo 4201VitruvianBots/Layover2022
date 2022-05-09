@@ -7,6 +7,17 @@
     },
     "windows": {
       "/SmartDashboard/Field2d": {
+        "Robot": {
+          "image": "resources/images/robot.png",
+          "length": 0.7620000243186951,
+          "width": 0.7620000243186951
+        },
+        "Swerve Modules": {
+          "image": "resources/images/swerve_module.png",
+          "length": 0.4000000059604645,
+          "width": 0.4000000059604645
+        },
+        "image": "resources/images/field22.png",
         "window": {
           "visible": true
         }
