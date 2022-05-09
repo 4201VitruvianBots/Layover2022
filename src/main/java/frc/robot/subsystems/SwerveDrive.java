@@ -27,36 +27,31 @@ import java.util.Map;
 public class SwerveDrive extends SubsystemBase {
 
   private final HashMap<ModulePosition, SwerveModule> m_swerveModules =
-      new HashMap<>(
-          Map.of(
-              ModulePosition.FRONT_LEFT,
+      SwerveModuleMap.of(
                   new SwerveModule(
-                      0,
+                      ModulePosition.FRONT_LEFT,
                       new TalonFX(CAN.frontLeftTurnMotor),
                       new TalonFX(CAN.frontLeftDriveMotor),
                       new CANCoder(CAN.frontLeftCanCoder),
                       0),
-              ModulePosition.FRONT_RIGHT,
                   new SwerveModule(
-                      1,
+                      ModulePosition.FRONT_RIGHT,
                       new TalonFX(CAN.frontRightTurnMotor),
                       new TalonFX(CAN.frontRightDriveMotor),
                       new CANCoder(CAN.frontRightCanCoder),
                       0),
-              ModulePosition.BACK_LEFT,
                   new SwerveModule(
-                      2,
+                      ModulePosition.BACK_LEFT,
                       new TalonFX(CAN.backLeftTurnMotor),
                       new TalonFX(CAN.backLeftDriveMotor),
                       new CANCoder(CAN.backLeftCanCoder),
                       0),
-              ModulePosition.BACK_RIGHT,
                   new SwerveModule(
-                      3,
+                      ModulePosition.BACK_RIGHT,
                       new TalonFX(CAN.backRightTurnMotor),
                       new TalonFX(CAN.backRightDriveMotor),
                       new CANCoder(CAN.backRightCanCoder),
-                      0)));
+                      0));
 
   private Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon);
 
@@ -96,19 +91,19 @@ public class SwerveDrive extends SubsystemBase {
                 throttle, strafe, rotation, getHeadingRotation2d())
             : new ChassisSpeeds(throttle, strafe, rotation);
 
-    SwerveModuleState[] moduleStates = kSwerveKinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleMap<SwerveModuleState> moduleStates = SwerveModuleMap.of(kSwerveKinematics.toSwerveModuleStates(chassisSpeeds));
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates.values().toArray(new SwerveModuleState[0]), kMaxSpeedMetersPerSecond);
 
     for (SwerveModule module : m_swerveModules.values())
-      module.setDesiredState(moduleStates[module.getModuleNumber()], isOpenLoop);
+      module.setDesiredState(moduleStates.get(module.getModulePosition()), isOpenLoop);
   }
 
-  public void setSwerveModuleStates(SwerveModuleState[] states, boolean isOpenLoop) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, kMaxSpeedMetersPerSecond);
+  public void setSwerveModuleStates(SwerveModuleMap<SwerveModuleState> states, boolean isOpenLoop) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(states.values().toArray(new SwerveModuleState[0]), kMaxSpeedMetersPerSecond);
 
     for (SwerveModule module : m_swerveModules.values())
-      module.setDesiredState(states[module.getModuleNumber()], isOpenLoop);
+      module.setDesiredState(states.get(module.getModulePosition()), isOpenLoop);
   }
 
   public double getHeadingDegrees() {
@@ -123,8 +118,8 @@ public class SwerveDrive extends SubsystemBase {
     return m_odometry.getEstimatedPosition();
   }
 
-  public SwerveModule getSwerveModule(int moduleNumber) {
-    return m_swerveModules.get(ModulePosition.values()[moduleNumber]);
+  public SwerveModule getSwerveModule(ModulePosition modulePosition) {
+    return m_swerveModules.get(modulePosition);
   }
 
   public SwerveModuleState[] getModuleStates() {
@@ -141,7 +136,7 @@ public class SwerveDrive extends SubsystemBase {
 
     for (SwerveModule module : m_swerveModules.values()) {
       var modulePositionFromChassis =
-          kModuleTranslations[module.getModuleNumber()]
+          kModuleTranslations.get(module.getModulePosition())
               .rotateBy(getHeadingRotation2d())
               .plus(getPoseMeters().getTranslation());
       module.setModulePose(

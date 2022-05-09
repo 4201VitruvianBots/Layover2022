@@ -10,6 +10,10 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
+import javax.swing.table.TableRowSorter;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -49,15 +53,15 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(30);
     public static final double kWheelBase = Units.inchesToMeters(30);
 
-    public static final Translation2d[] kModuleTranslations = {
+    public static final SwerveModuleMap<Translation2d> kModuleTranslations = SwerveModuleMap.of(
       new Translation2d(kWheelBase / 2, kTrackWidth / 2),
       new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
       new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
       new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
-    };
+    );
 
     public static final SwerveDriveKinematics kSwerveKinematics =
-        new SwerveDriveKinematics(kModuleTranslations);
+        new SwerveDriveKinematics(kModuleTranslations.values().toArray(new Translation2d[0]));
 
     public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(18);
     public static final double kMaxRotationRadiansPerSecond = Math.PI * 1.5;
@@ -79,6 +83,27 @@ public final class Constants {
       FRONT_RIGHT,
       BACK_LEFT,
       BACK_RIGHT
+    }
+
+    public static final class SwerveModuleMap<V> extends HashMap<ModulePosition, V> {
+      public SwerveModuleMap() {}
+
+      @SafeVarargs
+      public static <V> SwerveModuleMap<V> of(V... values) {
+        SwerveModuleMap<V> map = new SwerveModuleMap<>();
+        for (int i = 0; i < ModulePosition.values().length; i++) {
+          map.put(ModulePosition.values()[i], values[i]);
+        }
+        return map;
+      }
+
+      public static <V> SwerveModuleMap<V> of(Map<ModulePosition, V> mapIn) {
+        SwerveModuleMap<V> mapOut = new SwerveModuleMap<>();
+        for (ModulePosition i : ModulePosition.values()) {
+          mapOut.put(i, mapIn.get(i));
+        }
+        return mapOut;
+      }
     }
   }
 

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.SwerveDrive.kMaxSpeedMetersPerSecond;
+import frc.robot.Constants.SwerveDrive.ModulePosition;
 import static frc.robot.Constants.SwerveModule.*;
 import static frc.robot.Constants.SwerveModule.kDriveMotorGearRatio;
 
@@ -25,7 +26,7 @@ import frc.robot.Constants;
 import frc.robot.CtreUtils;
 
 public class SwerveModule extends SubsystemBase {
-  int m_moduleNumber;
+  ModulePosition m_modulePosition;
   TalonFX m_turnMotor;
   TalonFX m_driveMotor;
   CANCoder m_angleEncoder;
@@ -55,12 +56,12 @@ public class SwerveModule extends SubsystemBase {
   private double m_turnMotorSimDistance;
 
   public SwerveModule(
-      int moduleNumber,
+      ModulePosition modulePosition,
       TalonFX turnMotor,
       TalonFX driveMotor,
       CANCoder angleEncoder,
       double angleOffset) {
-    m_moduleNumber = moduleNumber;
+    m_modulePosition = modulePosition;
     m_turnMotor = turnMotor;
     m_driveMotor = driveMotor;
     m_angleEncoder = angleEncoder;
@@ -79,8 +80,8 @@ public class SwerveModule extends SubsystemBase {
     resetAngleToAbsolute();
   }
 
-  public int getModuleNumber() {
-    return m_moduleNumber;
+  public ModulePosition getModulePosition() {
+    return m_modulePosition;
   }
 
   public void resetAngleToAbsolute() {
