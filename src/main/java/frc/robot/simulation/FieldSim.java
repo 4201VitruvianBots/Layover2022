@@ -50,7 +50,7 @@ public class FieldSim {
                   .plus(m_swerveDrive.getHeadingRotation2d())));
     }
 
-    m_field2d.getObject("Swerve Modules").setPoses(m_swerveModulePoses.values().toArray(new Pose2d[0]));
+    m_field2d.getObject("Swerve Modules").setPoses(m_swerveModulePoses.valuesArray(Pose2d.class));
   }
 
   public void periodic() {

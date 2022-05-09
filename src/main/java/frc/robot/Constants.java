@@ -62,7 +62,7 @@ public final class Constants {
     );
 
     public static final SwerveDriveKinematics kSwerveKinematics =
-        new SwerveDriveKinematics(kModuleTranslations.values().toArray(new Translation2d[0]));
+        new SwerveDriveKinematics(kModuleTranslations.valuesArray(Translation2d.class));
 
     public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(18);
     public static final double kMaxRotationRadiansPerSecond = Math.PI * 1.5;
@@ -119,6 +119,10 @@ public final class Constants {
           list.add(get(i));
         }
         return list;
+      }
+
+      public V[] valuesArray(Class<V> clazz) {
+        return (V[])orderedValues().toArray();
       }
     }
   }
