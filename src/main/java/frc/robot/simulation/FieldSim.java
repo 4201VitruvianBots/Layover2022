@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.SwerveDrive.ModulePosition;
-import frc.robot.utils.SwerveModuleMap;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.utils.SwerveModuleMap;
 
 public class FieldSim {
   private final SwerveDrive m_swerveDrive;

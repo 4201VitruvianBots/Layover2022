@@ -50,12 +50,12 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(30);
     public static final double kWheelBase = Units.inchesToMeters(30);
 
-    public static final SwerveModuleMap<Translation2d> kModuleTranslations = SwerveModuleMap.of(
-      ModulePosition.FRONT_LEFT, new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-      ModulePosition.FRONT_RIGHT, new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-      ModulePosition.BACK_LEFT, new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-      ModulePosition.BACK_RIGHT, new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
-    );
+    public static final SwerveModuleMap<Translation2d> kModuleTranslations =
+        SwerveModuleMap.of(
+            ModulePosition.FRONT_LEFT, new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+            ModulePosition.FRONT_RIGHT, new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+            ModulePosition.BACK_LEFT, new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+            ModulePosition.BACK_RIGHT, new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     public static final SwerveDriveKinematics kSwerveKinematics =
         new SwerveDriveKinematics(kModuleTranslations.valuesArray(new Translation2d[0]));
@@ -81,7 +81,6 @@ public final class Constants {
       BACK_LEFT,
       BACK_RIGHT
     }
-
   }
 
   public static final class SwerveModule {
@@ -107,5 +106,4 @@ public final class Constants {
     public static final double kvTurnVoltSecondsPerRadian = 1.47; // originally 1.5
     public static final double kaTurnVoltSecondsSquaredPerRadian = 0.348; // originally 0.3
   }
-
 }
