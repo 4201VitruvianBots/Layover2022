@@ -85,11 +85,24 @@ public final class Constants {
       BACK_LEFT,
       BACK_RIGHT
     }
-
+    
+    /**
+     * A convenience class that maps {@link ModulePositions} to any class, e.g. module translations, module states, etc.<p>
+     * Also contains functions to convert to and from arrays so that it's easier to use WPILib functions
+     */
     public static final class SwerveModuleMap<V> extends HashMap<ModulePosition, V> {
       public SwerveModuleMap() {}
+      
+      public SwerveModuleMap(Map<ModulePosition, V> map) {
+        for (ModulePosition i : map.keySet()) {
+          this.put(i, map.get(i));
+        }
+      }
 
-      // This should only really be used to process the output of another function
+      /**
+       * Creates a SwerveModuleMap from multiple values, in the order specified in the {@link ModulePosition} enum.<p>
+       * For instantiation, it's better to use {@link #of(ModulePosition, V, ModulePosition, V, ModulePosition, V, ModulePosition, V) of}{@code (K,V,K,V,K,V,K,V)} for clarity
+       */
       @SafeVarargs
       public static <V> SwerveModuleMap<V> of(V... values) {
         SwerveModuleMap<V> map = new SwerveModuleMap<>();
@@ -99,20 +112,17 @@ public final class Constants {
         return map;
       }
 
-      public static <V> SwerveModuleMap<V> of(Map<ModulePosition, V> mapIn) {
-        SwerveModuleMap<V> mapOut = new SwerveModuleMap<>();
-        for (ModulePosition i : mapIn.keySet()) {
-          mapOut.put(i, mapIn.get(i));
-        }
-        return mapOut;
-      }
-
-      // For readability on declaration
+      /**
+       * Creates a SwerveModuleMap mapping four {@link ModulePosition}s and four values.
+       */
       public static <V> SwerveModuleMap<V> of(ModulePosition k1, V v1, ModulePosition k2, V v2, ModulePosition k3, V v3, ModulePosition k4, V v4) {
         return SwerveModuleMap.of(Map.of(k1,v1,k2,v2,k3,v3,k4,v4));
       }
 
-      // Use this instead of values() to keep the modules in the right order
+      /**
+       * Returns the values from the map as a {@link List} in the same order as in the {@link ModulePosition} enum.<p>
+       * Use instead of {@link #values() values} because that returns a {@link Collection}, which is not ordered.
+       */
       public List<V> orderedValues() {
         ArrayList<V> list = new ArrayList<>();
         for (ModulePosition i : ModulePosition.values()) {
@@ -120,7 +130,12 @@ public final class Constants {
         }
         return list;
       }
-
+      
+      /**
+       * Returns the values from the map as an Array in the same order as in the {@link ModulePosition} enum.<p>
+       * 
+       * @param clazz The class to output an array of, e.g. {@code modulePositions.valuesArray(Translation2d.class)}. Required because Java can't make an array of generics.
+       */
       public V[] valuesArray(Class<V> clazz) {
         return (V[])orderedValues().toArray();
       }
