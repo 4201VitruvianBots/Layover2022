@@ -88,7 +88,7 @@ public final class Constants {
     
     /**
      * A convenience class that maps {@link ModulePositions} to any class, e.g. module translations, module states, etc.<p>
-     * Also contains functions to convert to and from arrays so that it's easier to use WPILib functions
+     * Also contains functions to convert to and from arrays so that it's easier to use WPILib swerve functions.
      */
     public static final class SwerveModuleMap<V> extends HashMap<ModulePosition, V> {
       public SwerveModuleMap() {}
@@ -101,7 +101,8 @@ public final class Constants {
 
       /**
        * Creates a SwerveModuleMap from multiple values, in the order specified in the {@link ModulePosition} enum.<p>
-       * For instantiation, it's better to use {@link #of(ModulePosition, V, ModulePosition, V, ModulePosition, V, ModulePosition, V) of}{@code (K,V,K,V,K,V,K,V)} for clarity
+       * For instantiation, it's better to use {@link #of(ModulePosition, V, ModulePosition, V, ModulePosition, V, ModulePosition, V) of}{@code (K,V,K,V,K,V,K,V)}
+       * for clarity. However, it is useful for processing the output of a WPILib swerve function which returns an array.
        */
       @SafeVarargs
       public static <V> SwerveModuleMap<V> of(V... values) {
@@ -133,6 +134,7 @@ public final class Constants {
       
       /**
        * Returns the values from the map as an Array in the same order as in the {@link ModulePosition} enum.<p>
+       * Useful when a WPILib swerve function requires an array as input
        * 
        * @param clazz The class to output an array of, e.g. {@code modulePositions.valuesArray(Translation2d.class)}. Required because Java can't make an array of generics.
        */
