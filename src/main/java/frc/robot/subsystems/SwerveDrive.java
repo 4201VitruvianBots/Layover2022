@@ -21,41 +21,40 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN;
-import java.util.HashMap;
-import java.util.Map;
+import frc.robot.utils.SwerveModuleMap;
 
 public class SwerveDrive extends SubsystemBase {
 
   private final SwerveModuleMap<SwerveModule> m_swerveModules =
       SwerveModuleMap.of(
-              ModulePosition.FRONT_LEFT,
-                  new SwerveModule(
-                      ModulePosition.FRONT_LEFT,
-                      new TalonFX(CAN.frontLeftTurnMotor),
-                      new TalonFX(CAN.frontLeftDriveMotor),
-                      new CANCoder(CAN.frontLeftCanCoder),
-                      0),
-              ModulePosition.FRONT_RIGHT,
-                  new SwerveModule(
-                      ModulePosition.FRONT_RIGHT,
-                      new TalonFX(CAN.frontRightTurnMotor),
-                      new TalonFX(CAN.frontRightDriveMotor),
-                      new CANCoder(CAN.frontRightCanCoder),
-                      0),
-              ModulePosition.BACK_LEFT,
-                  new SwerveModule(
-                      ModulePosition.BACK_LEFT,
-                      new TalonFX(CAN.backLeftTurnMotor),
-                      new TalonFX(CAN.backLeftDriveMotor),
-                      new CANCoder(CAN.backLeftCanCoder),
-                      0),
-              ModulePosition.BACK_RIGHT,
-                  new SwerveModule(
-                      ModulePosition.BACK_RIGHT,
-                      new TalonFX(CAN.backRightTurnMotor),
-                      new TalonFX(CAN.backRightDriveMotor),
-                      new CANCoder(CAN.backRightCanCoder),
-                      0));
+          ModulePosition.FRONT_LEFT,
+              new SwerveModule(
+                  ModulePosition.FRONT_LEFT,
+                  new TalonFX(CAN.frontLeftTurnMotor),
+                  new TalonFX(CAN.frontLeftDriveMotor),
+                  new CANCoder(CAN.frontLeftCanCoder),
+                  0),
+          ModulePosition.FRONT_RIGHT,
+              new SwerveModule(
+                  ModulePosition.FRONT_RIGHT,
+                  new TalonFX(CAN.frontRightTurnMotor),
+                  new TalonFX(CAN.frontRightDriveMotor),
+                  new CANCoder(CAN.frontRightCanCoder),
+                  0),
+          ModulePosition.BACK_LEFT,
+              new SwerveModule(
+                  ModulePosition.BACK_LEFT,
+                  new TalonFX(CAN.backLeftTurnMotor),
+                  new TalonFX(CAN.backLeftDriveMotor),
+                  new CANCoder(CAN.backLeftCanCoder),
+                  0),
+          ModulePosition.BACK_RIGHT,
+              new SwerveModule(
+                  ModulePosition.BACK_RIGHT,
+                  new TalonFX(CAN.backRightTurnMotor),
+                  new TalonFX(CAN.backRightDriveMotor),
+                  new CANCoder(CAN.backRightCanCoder),
+                  0));
 
   private Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon);
 
@@ -95,16 +94,19 @@ public class SwerveDrive extends SubsystemBase {
                 throttle, strafe, rotation, getHeadingRotation2d())
             : new ChassisSpeeds(throttle, strafe, rotation);
 
-    SwerveModuleMap<SwerveModuleState> moduleStates = SwerveModuleMap.of(kSwerveKinematics.toSwerveModuleStates(chassisSpeeds));
+    SwerveModuleMap<SwerveModuleState> moduleStates =
+        SwerveModuleMap.of(kSwerveKinematics.toSwerveModuleStates(chassisSpeeds));
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates.valuesArray(SwerveModuleState.class), kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        moduleStates.valuesArray(new SwerveModuleState[0]), kMaxSpeedMetersPerSecond);
 
     for (SwerveModule module : m_swerveModules.orderedValues())
       module.setDesiredState(moduleStates.get(module.getModulePosition()), isOpenLoop);
   }
 
   public void setSwerveModuleStates(SwerveModuleMap<SwerveModuleState> states, boolean isOpenLoop) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(states.valuesArray(SwerveModuleState.class), kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        states.valuesArray(new SwerveModuleState[0]), kMaxSpeedMetersPerSecond);
 
     for (SwerveModule module : m_swerveModules.orderedValues())
       module.setDesiredState(states.get(module.getModulePosition()), isOpenLoop);
@@ -135,11 +137,13 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void updateOdometry() {
-    m_odometry.update(getHeadingRotation2d(), getModuleStates().valuesArray(SwerveModuleState.class));
+    m_odometry.update(
+        getHeadingRotation2d(), getModuleStates().valuesArray(new SwerveModuleState[0]));
 
     for (SwerveModule module : m_swerveModules.orderedValues()) {
       var modulePositionFromChassis =
-          kModuleTranslations.get(module.getModulePosition())
+          kModuleTranslations
+              .get(module.getModulePosition())
               .rotateBy(getHeadingRotation2d())
               .plus(getPoseMeters().getTranslation());
       module.setModulePose(
@@ -159,7 +163,8 @@ public class SwerveDrive extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    ChassisSpeeds chassisSpeed = kSwerveKinematics.toChassisSpeeds(getModuleStates().valuesArray(SwerveModuleState.class));
+    ChassisSpeeds chassisSpeed =
+        kSwerveKinematics.toChassisSpeeds(getModuleStates().valuesArray(new SwerveModuleState[0]));
 
     m_simYaw += chassisSpeed.omegaRadiansPerSecond * 0.02;
 

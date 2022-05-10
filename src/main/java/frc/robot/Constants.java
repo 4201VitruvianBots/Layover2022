@@ -9,11 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import frc.robot.utils.SwerveModuleMap;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -62,7 +58,7 @@ public final class Constants {
     );
 
     public static final SwerveDriveKinematics kSwerveKinematics =
-        new SwerveDriveKinematics(kModuleTranslations.valuesArray(Translation2d.class));
+        new SwerveDriveKinematics(kModuleTranslations.valuesArray(new Translation2d[0]));
 
     public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(18);
     public static final double kMaxRotationRadiansPerSecond = Math.PI * 1.5;
@@ -85,70 +81,7 @@ public final class Constants {
       BACK_LEFT,
       BACK_RIGHT
     }
-    
-    /**
-     * A convenience class that maps {@link ModulePositions} to any class, e.g. module translations, module states, etc.<p>
-     * Also contains functions to convert to and from arrays so that it's easier to use WPILib swerve functions.
-     */
-    public static class SwerveModuleMap<V> extends HashMap<ModulePosition, V> {
-      public SwerveModuleMap() {}
-      
-      /**
-       * Creates a SwerveModuleMap with the contents of a {@link Map}.
-       * 
-       * @param map Must have {@link ModulePosition} as the key type
-       */
-      public SwerveModuleMap(Map<ModulePosition, V> map) {
-        for (ModulePosition i : map.keySet()) {
-          this.put(i, map.get(i));
-        }
-      }
 
-      /**
-       * Creates a SwerveModuleMap from multiple values, in the order specified in the {@link ModulePosition} enum.<p>
-       * For instantiation, it's better to use {@link #of(ModulePosition, V, ModulePosition, V, ModulePosition, V, ModulePosition, V) of}{@code (K,V,K,V,K,V,K,V)}
-       * for clarity. However, it is useful for processing the output of a WPILib swerve function which returns an array.
-       * 
-       * @param values Must have at least as many elements as {@ModulePosition} has entries. Any entries after will be ignored.
-       */
-      @SafeVarargs
-      public static <V> SwerveModuleMap<V> of(V... values) {
-        SwerveModuleMap<V> map = new SwerveModuleMap<>();
-        for (int i = 0; i < ModulePosition.values().length; i++) {
-          map.put(ModulePosition.values()[i], values[i]);
-        }
-        return map;
-      }
-
-      /**
-       * Creates a SwerveModuleMap mapping four {@link ModulePosition}s and four values.
-       */
-      public static <V> SwerveModuleMap<V> of(ModulePosition k1, V v1, ModulePosition k2, V v2, ModulePosition k3, V v3, ModulePosition k4, V v4) {
-        return SwerveModuleMap.of(Map.of(k1,v1,k2,v2,k3,v3,k4,v4));
-      }
-
-      /**
-       * Returns the values from the map as a {@link List} in the same order as in the {@link ModulePosition} enum.<p>
-       * Use instead of {@link #values() values} because that returns a {@link Collection}, which is not ordered.
-       */
-      public List<V> orderedValues() {
-        ArrayList<V> list = new ArrayList<>();
-        for (ModulePosition i : ModulePosition.values()) {
-          list.add(get(i));
-        }
-        return list;
-      }
-      
-      /**
-       * Returns the values from the map as an Array in the same order as in the {@link ModulePosition} enum.<p>
-       * Useful when a WPILib swerve function requires an array as input
-       * 
-       * @param clazz The class to output an array of, e.g. {@code modulePositions.valuesArray(Translation2d.class)}. Required because Java can't make an array of generics.
-       */
-      public V[] valuesArray(Class<V> clazz) { // TODO is clazz needed? Can I just use V[]?
-        return (V[])orderedValues().toArray();
-      }
-    }
   }
 
   public static final class SwerveModule {
@@ -174,4 +107,5 @@ public final class Constants {
     public static final double kvTurnVoltSecondsPerRadian = 1.47; // originally 1.5
     public static final double kaTurnVoltSecondsSquaredPerRadian = 0.348; // originally 0.3
   }
+
 }

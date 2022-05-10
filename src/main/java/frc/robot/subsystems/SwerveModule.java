@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.SwerveDrive.kMaxSpeedMetersPerSecond;
-import frc.robot.Constants.SwerveDrive.ModulePosition;
 import static frc.robot.Constants.SwerveModule.*;
 import static frc.robot.Constants.SwerveModule.kDriveMotorGearRatio;
 
@@ -23,6 +22,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveDrive.ModulePosition;
 import frc.robot.CtreUtils;
 
 public class SwerveModule extends SubsystemBase {
