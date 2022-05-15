@@ -10,7 +10,6 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.utils.ModuleMap;
-
 import java.util.Map;
 
 /**
@@ -52,7 +51,7 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(30);
     public static final double kWheelBase = Units.inchesToMeters(30);
 
-    public static final Map<ModulePosition,Translation2d> kModuleTranslations =
+    public static final Map<ModulePosition, Translation2d> kModuleTranslations =
         Map.of(
             ModulePosition.FRONT_LEFT, new Translation2d(kWheelBase / 2, kTrackWidth / 2),
             ModulePosition.FRONT_RIGHT, new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -60,7 +59,8 @@ public final class Constants {
             ModulePosition.BACK_RIGHT, new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     public static final SwerveDriveKinematics kSwerveKinematics =
-        new SwerveDriveKinematics(ModuleMap.orderedValues(kModuleTranslations,new Translation2d[0]));
+        new SwerveDriveKinematics(
+            ModuleMap.orderedValues(kModuleTranslations, new Translation2d[0]));
 
     public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(18);
     public static final double kMaxRotationRadiansPerSecond = Math.PI * 1.5;

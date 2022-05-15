@@ -14,15 +14,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.SwerveDrive.ModulePosition;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.utils.ModuleMap;
-
 import java.util.Map;
 
 public class FieldSim {
   private final SwerveDrive m_swerveDrive;
 
-  private Field2d m_field2d = new Field2d();
+  private final Field2d m_field2d = new Field2d();
 
-  private Map<ModulePosition,Pose2d> m_swerveModulePoses =
+  private final Map<ModulePosition, Pose2d> m_swerveModulePoses =
       ModuleMap.of(new Pose2d(), new Pose2d(), new Pose2d(), new Pose2d());
 
   public FieldSim(SwerveDrive swerveDrive) {
@@ -54,7 +53,9 @@ public class FieldSim {
                   .plus(m_swerveDrive.getHeadingRotation2d())));
     }
 
-    m_field2d.getObject("Swerve Modules").setPoses(ModuleMap.orderedValues(m_swerveModulePoses,new Pose2d[0]));
+    m_field2d
+        .getObject("Swerve Modules")
+        .setPoses(ModuleMap.orderedValues(m_swerveModulePoses, new Pose2d[0]));
   }
 
   public void periodic() {

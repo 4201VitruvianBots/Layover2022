@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class SwerveModuleSim {
 
-  private SimpleMotorWithMassModel steerMotor;
-  private MotorGearboxWheelSim driveMotor;
+  private final SimpleMotorWithMassModel steerMotor;
+  private final MotorGearboxWheelSim driveMotor;
 
   private final double azimuthEncGearRatio; // Motor-to-azimuth-encoder reduction
   private final double wheelEncGearRatio; // Motor-to-wheel-encoder reduction
@@ -33,12 +33,12 @@ public class SwerveModuleSim {
   double wheelVoltage;
   double steerVoltage;
 
-  private ShuffleboardTab tab = Shuffleboard.getTab("SimSwerve");
-  private NetworkTableEntry azmthVoltageEntry;
-  private NetworkTableEntry wheelVoltageEntry;
-  private NetworkTableEntry azmthSpeedEntry;
-  private NetworkTableEntry azmthPosEntry;
-  private NetworkTableEntry wheelSpeedEntry;
+  private final ShuffleboardTab tab = Shuffleboard.getTab("SimSwerve");
+  private final NetworkTableEntry azmthVoltageEntry;
+  private final NetworkTableEntry wheelVoltageEntry;
+  private final NetworkTableEntry azmthSpeedEntry;
+  private final NetworkTableEntry azmthPosEntry;
+  private final NetworkTableEntry wheelSpeedEntry;
 
   public SwerveModuleSim(
       DCMotor azimuthMotor,
