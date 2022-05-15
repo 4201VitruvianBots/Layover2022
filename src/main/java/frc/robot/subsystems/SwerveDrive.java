@@ -15,18 +15,22 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN;
-import frc.robot.utils.SwerveModuleMap;
+import frc.robot.utils.ModuleMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SwerveDrive extends SubsystemBase {
 
-  private final SwerveModuleMap<SwerveModule> m_swerveModules =
-      SwerveModuleMap.of(
+  private final Map<ModulePosition,SwerveModule> m_swerveModules =
+      Map.of(
           ModulePosition.FRONT_LEFT,
               new SwerveModule(
                   ModulePosition.FRONT_LEFT,
@@ -94,21 +98,21 @@ public class SwerveDrive extends SubsystemBase {
                 throttle, strafe, rotation, getHeadingRotation2d())
             : new ChassisSpeeds(throttle, strafe, rotation);
 
-    SwerveModuleMap<SwerveModuleState> moduleStates =
-        SwerveModuleMap.of(kSwerveKinematics.toSwerveModuleStates(chassisSpeeds));
+    Map<ModulePosition,SwerveModuleState> moduleStates =
+        ModuleMap.of(kSwerveKinematics.toSwerveModuleStates(chassisSpeeds));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        moduleStates.valuesArray(new SwerveModuleState[0]), kMaxSpeedMetersPerSecond);
+        ModuleMap.orderedValues(moduleStates, new SwerveModuleState[0]), kMaxSpeedMetersPerSecond);
 
-    for (SwerveModule module : m_swerveModules.orderedValues())
+    for (SwerveModule module : ModuleMap.orderedValuesList(m_swerveModules))
       module.setDesiredState(moduleStates.get(module.getModulePosition()), isOpenLoop);
   }
 
-  public void setSwerveModuleStates(SwerveModuleMap<SwerveModuleState> states, boolean isOpenLoop) {
+  public void setSwerveModuleStates(Map<ModulePosition,SwerveModuleState> states, boolean isOpenLoop) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        states.valuesArray(new SwerveModuleState[0]), kMaxSpeedMetersPerSecond);
+        ModuleMap.orderedValues(states,new SwerveModuleState[0]), kMaxSpeedMetersPerSecond);
 
-    for (SwerveModule module : m_swerveModules.orderedValues())
+    for (SwerveModule module : ModuleMap.orderedValuesList(m_swerveModules))
       module.setDesiredState(states.get(module.getModulePosition()), isOpenLoop);
   }
 
@@ -128,8 +132,8 @@ public class SwerveDrive extends SubsystemBase {
     return m_swerveModules.get(modulePosition);
   }
 
-  public SwerveModuleMap<SwerveModuleState> getModuleStates() {
-    SwerveModuleMap<SwerveModuleState> map = new SwerveModuleMap<>();
+  public Map<ModulePosition,SwerveModuleState> getModuleStates() {
+    Map<ModulePosition,SwerveModuleState> map = new HashMap<>();
     for (ModulePosition i : m_swerveModules.keySet()) {
       map.put(i, m_swerveModules.get(i).getState());
     }
@@ -138,10 +142,10 @@ public class SwerveDrive extends SubsystemBase {
 
   public void updateOdometry() {
     m_odometry.update(
-        getHeadingRotation2d(), getModuleStates().valuesArray(new SwerveModuleState[0]));
+        getHeadingRotation2d(), ModuleMap.orderedValues(getModuleStates(),new SwerveModuleState[0]));
 
-    for (SwerveModule module : m_swerveModules.orderedValues()) {
-      var modulePositionFromChassis =
+    for (SwerveModule module : ModuleMap.orderedValuesList(m_swerveModules)) {
+      Translation2d modulePositionFromChassis =
           kModuleTranslations
               .get(module.getModulePosition())
               .rotateBy(getHeadingRotation2d())
@@ -164,7 +168,7 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     ChassisSpeeds chassisSpeed =
-        kSwerveKinematics.toChassisSpeeds(getModuleStates().valuesArray(new SwerveModuleState[0]));
+        kSwerveKinematics.toChassisSpeeds(ModuleMap.orderedValues(getModuleStates(),new SwerveModuleState[0]));
 
     m_simYaw += chassisSpeed.omegaRadiansPerSecond * 0.02;
 

@@ -9,7 +9,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.utils.SwerveModuleMap;
+import frc.robot.utils.ModuleMap;
+
+import java.util.Map;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -50,15 +52,15 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(30);
     public static final double kWheelBase = Units.inchesToMeters(30);
 
-    public static final SwerveModuleMap<Translation2d> kModuleTranslations =
-        SwerveModuleMap.of(
+    public static final Map<ModulePosition,Translation2d> kModuleTranslations =
+        Map.of(
             ModulePosition.FRONT_LEFT, new Translation2d(kWheelBase / 2, kTrackWidth / 2),
             ModulePosition.FRONT_RIGHT, new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
             ModulePosition.BACK_LEFT, new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
             ModulePosition.BACK_RIGHT, new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     public static final SwerveDriveKinematics kSwerveKinematics =
-        new SwerveDriveKinematics(kModuleTranslations.valuesArray(new Translation2d[0]));
+        new SwerveDriveKinematics(ModuleMap.orderedValues(kModuleTranslations,new Translation2d[0]));
 
     public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(18);
     public static final double kMaxRotationRadiansPerSecond = Math.PI * 1.5;
