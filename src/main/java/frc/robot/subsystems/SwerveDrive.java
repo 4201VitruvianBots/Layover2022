@@ -35,21 +35,21 @@ public class SwerveDrive extends SubsystemBase {
                       new TalonFX(CAN.frontLeftTurnMotor),
                       new TalonFX(CAN.frontLeftDriveMotor),
                       new CANCoder(CAN.frontLeftCanCoder),
-                      0),
+                      -275.713),
               ModulePosition.FRONT_RIGHT,
                   new SwerveModule(
                       1,
                       new TalonFX(CAN.frontRightTurnMotor),
                       new TalonFX(CAN.frontRightDriveMotor),
                       new CANCoder(CAN.frontRightCanCoder),
-                      0),
+                      -309.023),
               ModulePosition.BACK_LEFT,
                   new SwerveModule(
                       2,
                       new TalonFX(CAN.backLeftTurnMotor),
                       new TalonFX(CAN.backLeftDriveMotor),
                       new CANCoder(CAN.backLeftCanCoder),
-                      0),
+                      -106.172),
               ModulePosition.BACK_RIGHT,
                   new SwerveModule(
                       3,
@@ -78,7 +78,9 @@ public class SwerveDrive extends SubsystemBase {
 
   private double m_simYaw;
 
-  public SwerveDrive() {}
+  public SwerveDrive() {
+    m_pigeon.setYaw(0);
+  }
 
   public void drive(
       double throttle,
