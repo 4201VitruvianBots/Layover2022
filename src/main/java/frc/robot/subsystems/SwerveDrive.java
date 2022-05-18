@@ -117,7 +117,7 @@ public class SwerveDrive extends SubsystemBase {
       module.setDesiredState(states[module.getModulePosition().ordinal()], isOpenLoop);
   }
 
-  public void setSwerveModuleStates(SwerveModuleState[] states) {
+  public void setSwerveModuleStatesAuto(SwerveModuleState[] states) {
     setSwerveModuleStates(states, false);
   }
 
