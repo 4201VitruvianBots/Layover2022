@@ -35,28 +35,28 @@ public class SwerveDrive extends SubsystemBase {
                       new TalonFX(CAN.frontLeftTurnMotor),
                       new TalonFX(CAN.frontLeftDriveMotor),
                       new CANCoder(CAN.frontLeftCanCoder),
-                      -275.713),
+                      94.219),
               ModulePosition.FRONT_RIGHT,
                   new SwerveModule(
                       1,
                       new TalonFX(CAN.frontRightTurnMotor),
                       new TalonFX(CAN.frontRightDriveMotor),
                       new CANCoder(CAN.frontRightCanCoder),
-                      -309.023),
+                      132.363),
               ModulePosition.BACK_LEFT,
                   new SwerveModule(
                       2,
                       new TalonFX(CAN.backLeftTurnMotor),
                       new TalonFX(CAN.backLeftDriveMotor),
                       new CANCoder(CAN.backLeftCanCoder),
-                      -106.172),
+                      284.590),
               ModulePosition.BACK_RIGHT,
                   new SwerveModule(
                       3,
                       new TalonFX(CAN.backRightTurnMotor),
                       new TalonFX(CAN.backRightDriveMotor),
                       new CANCoder(CAN.backRightCanCoder),
-                      0)));
+                      179.648)));
 
   private Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon);
 

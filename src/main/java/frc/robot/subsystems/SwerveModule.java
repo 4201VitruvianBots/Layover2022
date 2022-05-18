@@ -20,9 +20,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.CtreUtils;
+import frc.robot.utils.CtreUtils;
 
 public class SwerveModule extends SubsystemBase {
   int m_moduleNumber;
@@ -74,7 +75,7 @@ public class SwerveModule extends SubsystemBase {
 
     m_angleEncoder.configFactoryDefault();
     m_angleEncoder.configAllSettings(CtreUtils.generateCanCoderConfig());
-    m_angleEncoder.configMagnetOffset(m_angleOffset);
+    // m_angleEncoder.configMagnetOffset(m_angleOffset);
 
     resetAngleToAbsolute();
   }
@@ -84,8 +85,8 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void resetAngleToAbsolute() {
-    m_turnMotor.setSelectedSensorPosition(
-        m_angleEncoder.getAbsolutePosition() / kTurningEncoderDistancePerPulse);
+    double angle = m_angleEncoder.getAbsolutePosition() - m_angleOffset;
+    m_turnMotor.setSelectedSensorPosition(angle / kTurningMotorDistancePerPulse);
   }
 
   public double getHeadingDegrees() {
@@ -140,10 +141,17 @@ public class SwerveModule extends SubsystemBase {
     return m_pose;
   }
 
-  private void updateSmartDashboard() {}
+  private void updateSmartDashboard() {
+    SmartDashboard.putNumber(
+        "module " + m_moduleNumber + " heading", getState().angle.getDegrees());
+    SmartDashboard.putNumber(
+        "module " + m_moduleNumber + " CANCoder reading", m_angleEncoder.getAbsolutePosition());
+  }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    updateSmartDashboard();
+  }
 
   @Override
   public void simulationPeriodic() {
