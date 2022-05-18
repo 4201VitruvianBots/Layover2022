@@ -6,11 +6,13 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.SwerveDrive.*;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.unmanaged.Unmanaged;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -69,10 +71,10 @@ public class SwerveDrive extends SubsystemBase {
           VecBuilder.fill(0.05),
           VecBuilder.fill(0.1, 0.1, 0.1));
 
-  private ProfiledPIDController m_xController =
-      new ProfiledPIDController(kP_X, 0, kD_X, kThetaControllerConstraints);
-  private ProfiledPIDController m_yController =
-      new ProfiledPIDController(kP_Y, 0, kD_Y, kThetaControllerConstraints);
+  private PIDController m_xController =
+      new PIDController(kP_X, 0, kD_X);
+  private PIDController m_yController =
+      new PIDController(kP_Y, 0, kD_Y);
   private ProfiledPIDController m_turnController =
       new ProfiledPIDController(kP_Theta, 0, kD_Theta, kThetaControllerConstraints);
 
@@ -113,6 +115,15 @@ public class SwerveDrive extends SubsystemBase {
       module.setDesiredState(states[module.getModuleNumber()], isOpenLoop);
   }
 
+  public void setSwerveModuleStates(SwerveModuleState[] states) {
+    setSwerveModuleStates(states, false);
+  }
+
+  public void setOdometry(Pose2d pose) {
+    m_odometry.resetPosition(pose, pose.getRotation());
+    m_pigeon.setYaw(pose.getRotation().getDegrees());
+  }
+
   public double getHeadingDegrees() {
     return Math.IEEEremainder(m_pigeon.getYaw(), 360);
   }
@@ -138,6 +149,25 @@ public class SwerveDrive extends SubsystemBase {
     };
   }
 
+  public PIDController getXPidController() {
+    return m_xController;
+  }
+
+  public PIDController getYPidController() {
+    return m_yController;
+  }
+
+  public ProfiledPIDController getThetaPidController() {
+    return m_turnController;
+  }
+
+  public void setNeutralMode(NeutralMode mode)  {
+    for (SwerveModule module : m_swerveModules.values()) {
+      module.setDriveNeutralMode(mode);
+      module.setTurnNeutralMode(mode);
+    }
+  }
+  
   public void updateOdometry() {
     m_odometry.update(getHeadingRotation2d(), getModuleStates());
 

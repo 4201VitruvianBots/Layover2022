@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.SetSwerveDrive;
+import frc.robot.commands.auto.DriveForward;
 import frc.robot.simulation.FieldSim;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -60,11 +61,11 @@ public class RobotContainer {
     //         () -> -testController.getLeftX(),
     //         () -> -testController.getRightX()));
     m_swerveDrive.setDefaultCommand(
-      new SetSwerveDrive(
-          m_swerveDrive,
-          () -> leftJoystick.getRawAxis(1),
-          () -> leftJoystick.getRawAxis(0),
-          () -> rightJoystick.getRawAxis(0)));
+        new SetSwerveDrive(
+            m_swerveDrive,
+            () -> leftJoystick.getRawAxis(1),
+            () -> leftJoystick.getRawAxis(0),
+            () -> rightJoystick.getRawAxis(0)));
     m_fieldSim.initSim();
   }
 
@@ -87,6 +88,7 @@ public class RobotContainer {
 
   private void initializeAutoChooser() {
     m_autoChooser.setDefaultOption("Do Nothing", new WaitCommand(0));
+    m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive));
 
     SmartDashboard.putData("Auto Selector", m_autoChooser);
   }

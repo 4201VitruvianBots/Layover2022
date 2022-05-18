@@ -10,6 +10,7 @@ import static frc.robot.Constants.SwerveModule.kDriveMotorGearRatio;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.unmanaged.Unmanaged;
@@ -139,6 +140,14 @@ public class SwerveModule extends SubsystemBase {
 
   public Pose2d getModulePose() {
     return m_pose;
+  }
+
+  public void setDriveNeutralMode(NeutralMode mode) {
+    m_driveMotor.setNeutralMode(mode);
+  }
+
+  public void setTurnNeutralMode(NeutralMode mode) {
+    m_turnMotor.setNeutralMode(mode);
   }
 
   private void updateSmartDashboard() {
