@@ -24,9 +24,11 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveDrive.ModulePosition;
 import frc.robot.utils.CtreUtils;
 
 public class SwerveModule extends SubsystemBase {
+  ModulePosition m_modulePosition;
   int m_moduleNumber;
   TalonFX m_turnMotor;
   TalonFX m_driveMotor;
@@ -57,12 +59,13 @@ public class SwerveModule extends SubsystemBase {
   private double m_turnMotorSimDistance;
 
   public SwerveModule(
-      int moduleNumber,
+      ModulePosition modulePosition,
       TalonFX turnMotor,
       TalonFX driveMotor,
       CANCoder angleEncoder,
       double angleOffset) {
-    m_moduleNumber = moduleNumber;
+    m_modulePosition = modulePosition;
+    m_moduleNumber = m_modulePosition.ordinal();
     m_turnMotor = turnMotor;
     m_driveMotor = driveMotor;
     m_angleEncoder = angleEncoder;
@@ -81,8 +84,8 @@ public class SwerveModule extends SubsystemBase {
     resetAngleToAbsolute();
   }
 
-  public int getModuleNumber() {
-    return m_moduleNumber;
+  public ModulePosition getModulePosition() {
+    return m_modulePosition;
   }
 
   public void resetAngleToAbsolute() {
