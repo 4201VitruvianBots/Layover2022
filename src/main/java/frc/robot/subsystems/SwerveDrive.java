@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CAN;
 import frc.robot.utils.ModuleMap;
 import java.util.HashMap;
@@ -39,28 +40,28 @@ public class SwerveDrive extends SubsystemBase {
                       new TalonFX(CAN.frontLeftTurnMotor),
                       new TalonFX(CAN.frontLeftDriveMotor),
                       new CANCoder(CAN.frontLeftCanCoder),
-                      94.219),
+                      frontLeftCANCoderOffset),
               ModulePosition.FRONT_RIGHT,
                   new SwerveModule(
                       ModulePosition.FRONT_RIGHT,
                       new TalonFX(CAN.frontRightTurnMotor),
                       new TalonFX(CAN.frontRightDriveMotor),
                       new CANCoder(CAN.frontRightCanCoder),
-                      132.363),
+                      frontRightCANCoderOffset),
               ModulePosition.BACK_LEFT,
                   new SwerveModule(
                       ModulePosition.BACK_LEFT,
                       new TalonFX(CAN.backLeftTurnMotor),
                       new TalonFX(CAN.backLeftDriveMotor),
                       new CANCoder(CAN.backLeftCanCoder),
-                      284.590),
+                      backLeftCANCoderOffset),
               ModulePosition.BACK_RIGHT,
                   new SwerveModule(
                       ModulePosition.BACK_RIGHT,
                       new TalonFX(CAN.backRightTurnMotor),
                       new TalonFX(CAN.backRightDriveMotor),
                       new CANCoder(CAN.backRightCanCoder),
-                      179.648)));
+                      backRightCANCoderOffset)));
 
   private final Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon);
 
