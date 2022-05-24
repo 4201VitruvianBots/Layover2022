@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -107,7 +108,9 @@ public class RobotContainer {
     m_fieldSim.periodic();
   }
 
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_swerveDrive.setNeutralMode(NeutralMode.Coast);
+  }
 
   public void disabledPeriodic() {}
 
@@ -115,7 +118,9 @@ public class RobotContainer {
 
   public void autonomousPeriodic() {}
 
-  public void teleopInit() {}
+  public void teleopInit() {
+    m_swerveDrive.setNeutralMode(NeutralMode.Brake);
+  }
 
   public void teleopPeriodic() {}
 
