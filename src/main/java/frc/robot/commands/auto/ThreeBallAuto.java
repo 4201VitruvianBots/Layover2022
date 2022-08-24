@@ -7,6 +7,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.swerve.SetSwerveOdometry;
 import frc.robot.subsystems.SwerveDrive;
 
 public class ThreeBallAuto extends SequentialCommandGroup {
@@ -38,6 +39,7 @@ public class ThreeBallAuto extends SequentialCommandGroup {
             swerveDrive::setSwerveModuleStatesAuto,
             swerveDrive);
     addCommands(
+        new SetSwerveOdometry(swerveDrive, trajectory1.getInitialPose()), 
         // new InstantCommand(() -> swerveDrive.setOdometry(trajectory1.getInitialPose())),
         // new SetSimTrajectory(fieldSim, trajectory1, trajectory2, trajectory3),
         // // new SetOdometry(driveTrain, fieldSim, trajectory1.getInitialPose()), (probably don't )
@@ -49,6 +51,7 @@ public class ThreeBallAuto extends SequentialCommandGroup {
         // new ParallelDeadlineGroup(
         //     command1.andThen(() -> driveTrain.setMotorTankDrive(0, 0)),
         //     new AutoRunIntake(intake, indexer)),
+        command1,
 
         // stop intake (no intake stuff yet, need to implement)
         // shoot ball (no shooter stuff yet, need to implement)
