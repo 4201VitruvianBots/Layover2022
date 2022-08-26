@@ -33,7 +33,7 @@ import frc.robot.utils.VisionData;
 public class Vision extends SubsystemBase {
 
   private final Controls m_controls;
-  private final DriveTrain m_drivetrain;
+  private final SwerveDrive m_drivetrain;
   private final Turret m_turret;
 
   private final NetworkTable goal_camera;
@@ -77,7 +77,7 @@ public class Vision extends SubsystemBase {
   private DoubleLogEntry goalTargetValidLog;
 
   /** Creates a new Vision Subsystem. */
-  public Vision(Controls controls, DriveTrain driveTrain, Turret turret, DataLog logger) {
+  public Vision(Controls controls, SwerveDrive driveTrain, Turret turret, DataLog logger) {
     m_controls = controls;
     m_drivetrain = driveTrain;
     m_turret = turret;
@@ -363,7 +363,7 @@ public class Vision extends SubsystemBase {
   public Translation2d getCargoPositionFieldAbsolute(int index) {
     return getCargoPositionFromRobot(index)
         .rotateBy(m_drivetrain.getHeadingRotation2d())
-        .plus(m_drivetrain.getRobotPoseMeters().getTranslation());
+        .plus(m_drivetrain.getPoseMeters().getTranslation());
   }
 
   /**
@@ -481,7 +481,7 @@ public class Vision extends SubsystemBase {
             getDetectionTimestamp(),
             getTargetXAngle(CAMERA_POSITION.GOAL),
             getTargetYAngle(CAMERA_POSITION.GOAL),
-            m_drivetrain.getRobotPoseMeters());
+            m_drivetrain.getPoseMeters());
 
     if (bufferIdx > dataBuffer.length - 1) {
       System.arraycopy(dataBuffer, 0, dataBuffer, 1, dataBuffer.length - 1);
@@ -526,10 +526,11 @@ public class Vision extends SubsystemBase {
     angle =
         Math.sin(
             m_turret.getTurretRotation2d().minus(m_drivetrain.getHeadingRotation2d()).getRadians());
-    robotVelocity =
-        (m_drivetrain.getSpeedsMetersPerSecond().leftMetersPerSecond
-                + m_drivetrain.getSpeedsMetersPerSecond().rightMetersPerSecond)
-            / 2.0;
+    // robotVelocity =
+    //     (m_drivetrain.getSpeedsMetersPerSecond().leftMetersPerSecond
+    //             + m_drivetrain.getSpeedsMetersPerSecond().rightMetersPerSecond) TODO: Find Speed of Robot
+    //         / 2.0;
+            m_drivetrain.getOdometry();
     angularVelocity = 0;
     if (getValidTarget(CAMERA_POSITION.LIMELIGHT)) {
       angularVelocity =
@@ -538,7 +539,7 @@ public class Vision extends SubsystemBase {
       angularVelocity =
           angle * robotVelocity / getGoalTargetHorizontalDistance(CAMERA_POSITION.GOAL);
 
-    tangentalVelocity = Units.degreesToRadians(m_drivetrain.getHeadingRateDegrees());
+    tangentalVelocity = Units.degreesToRadians(m_drivetrain.getHeadingDegrees());
     ff = (angularVelocity + tangentalVelocity) * 0.006;
 
     //    SmartDashboardTab.putNumber("Vision", "Turret FF", ff);

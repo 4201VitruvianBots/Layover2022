@@ -4,11 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.utils.Conversions;
 import frc.robot.utils.ModuleMap;
 import java.util.Map;
 
@@ -29,6 +33,18 @@ public final class Constants {
     public static final int testController = 4;
   }
 
+  public static final class Pneumatics {
+    public static final int pcmOne = 11;
+    public static final PneumaticsModuleType pcmType =
+        PneumaticsModuleType.CTREPCM; // CTREPCM, REVPH
+
+    public static final int intakePistonForward = pcmType == PneumaticsModuleType.CTREPCM ? 0 : 0;
+    public static final int intakePistonReverse = pcmType == PneumaticsModuleType.CTREPCM ? 1 : 1;
+    public static final int climbPistonForward = pcmType == PneumaticsModuleType.CTREPCM ? 2 : 2;
+    public static final int climbPistonReverse = pcmType == PneumaticsModuleType.CTREPCM ? 3 : 3;
+  }
+
+
   public static final class CAN {
     public static final int pigeon = 9;
 
@@ -46,7 +62,92 @@ public final class Constants {
     public static final int backRightDriveMotor = 26;
     public static final int backRightTurnMotor = 27;
   }
+  public static final class Indexer {
+    public static final int ejectorMotor = 34;
+    public static final int indexerMotor = 35;
+    public static final int kickerMotor = 36;
+    public static final double kickerGearRatio = 5.0;
 
+    public static final int indexerRearSensor = 0; // Rear = closer to shooter
+    public static final int indexerFrontSensor = 1; // Front = closer to intake
+
+    public static final double kKickerKs = 0.63662;
+    public static final double kKickerKv = 0.017502;
+    public static final double kKickerKa = 0.00035281;
+
+    public static final double radiansPerSecondTolerance = 1.0;
+
+    public static final double falconMaxSpeedRadPerSecond = Conversions.RpmToRadPerSec(6380);
+  }
+  public final class Intake {
+    public static final int intakeMotor = 30;
+    public static final int intakeRollerMotor = 31;
+    // public static final int intakeSensor = 0;
+  }
+
+  public final class Flywheel {
+    public static final int flywheelMotorA = 40;
+    public static final int flywheelMotorB = 41;
+    public static final double hubToleranceDegrees = 3.0;
+
+    public static final int encoderUnitsPerRotation = 2048;
+
+    //    public static final double kFlywheelKs = 0;
+    //    public static final double kFlywheelKv = 0.02001;
+    //    public static final double kFlywheelKa = 0.002995;
+    public static final double kFlywheelKs =
+        0; // old flywheel: 0.53456; // 0.63348; // Jamgo: 0.53456;
+
+    // Volts per (radian per second)
+    public static final double kFlywheelKv =
+        0.018876; // old flywheel: 0.017092; // 0.01;//0.15784; // Jamgo: 0.017092;
+
+    // Volts per (radian per second squared)
+    public static final double kFlywheelKa =
+        0.0031698; // old flywheel: 0.0083035; // 0.008;//0.034438; // Jamgo: 0.0083035;
+
+    public static final double lqrRPMThreshold = 10.0;
+    public static final double rpmTolerance = 60.0;
+
+    public static final double gearRatio = 1.0;
+  }
+
+  public static final class Turret {
+    public static final int turretMotor = 60;
+
+    public static final int turretHomeSensor = 6;
+
+    public static final int encoderUnitsPerRotation = 2048;
+    public static final double canCoderAngleOffset = -329.150;
+    public static final double minAngle = -70;
+    public static final double maxAngle = 70;
+
+    //    public static final double kF = 0.07;
+    //    public static final double kP = 0.1;
+    //    public static final double kI = 0.00001;
+    //    public static final double kD = 0.0;
+    public static final double kF = 0.04;
+    public static final double kP = 0.15;
+    public static final double kI = 0.0008;
+    public static final double kD = 0.0;
+
+    public static final double kErrorBand = 50;
+    public static final double kI_Zone = 900;
+    public static final double kMaxIAccum = 1000;
+    public static final double kCruiseVelocity = 20000;
+    public static final double kMotionAcceleration = 30000;
+
+    public static final double kS = 0.83016; // 0.81464;
+    public static final double kV = 0.012184; // 0.16822;
+    public static final double kA = 0.00036802; // 0.011642;
+
+    public static final double degreeTolerance = 3.0;
+    public static final double degreesPerSecondTolerance = 10.0;
+
+    public static final double gearRatio = (60.0 / 16.0) * (170.0 / 16.0);
+  }
+
+ 
   public static final class SwerveDrive {
     public static final double kTrackWidth = Units.inchesToMeters(30);
     public static final double kWheelBase = Units.inchesToMeters(30);
@@ -88,7 +189,135 @@ public final class Constants {
       BACK_LEFT,
       BACK_RIGHT
     }
+
+    public static final class Vision {
+      public enum CAMERA_TYPE {
+        OAK,
+        LIMELIGHT,
+        PHOTONVISION
+      }
+  
+      public enum CAMERA_POSITION {
+        GOAL,
+        INTAKE,
+        LIMELIGHT
+      }
+  
+      public enum INTAKE_TRACKING_TYPE {
+        CARGO,
+        LAUNCHPAD
+      }
+  
+      //    public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 27.0; // Landing
+      public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 32.0; // Takeoff
+      public static double GOAL_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
+      public static double LIMELIGHT_MOUNTING_ANGLE_DEGREES = 36.0;
+      public static double LIMELIGHT_MOUNTING_HEIGHT_METERS = Units.inchesToMeters(38.0);
+      public static double INTAKE_CAMERA_MOUNTING_ANGLE_DEGREES = 34.3;
+      public static double INTAKE_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
+      public static double UPPER_HUB_HEIGHT_METERS = Units.inchesToMeters(104.0);
+      public static double UPPER_HUB_RADIUS_METERS = Units.feetToMeters(2);
+      public static double LOWER_HUB_HEIGHT_METERS = Units.inchesToMeters(41);
+      public static double LOWER_HUB_RADIUS_METERS = Units.inchesToMeters(30.0625);
+      public static double CARGO_RADIUS = Units.inchesToMeters(4.75);
+  
+      public static double TRAJECTORY_MAX_CARGO_DISTANCE = Units.inchesToMeters(30);
+      public static double TRAJECTORY_CARGO_POSITION_TOLERANCE = Units.feetToMeters(1.0);
+  
+      public static final Pose2d CARGO_TARMAC_ONE = new Pose2d(7.64, 0.37, new Rotation2d());
+      public static final Pose2d CARGO_TARMAC_TWO = new Pose2d(4.64, 2.29, new Rotation2d());
+      public static final Pose2d CARGO_TERMINAL = new Pose2d(0.456, 0.81, new Rotation2d());
+  
+      public static Pose2d HUB_POSE =
+          new Pose2d(Units.feetToMeters(27), Units.feetToMeters(13.5), new Rotation2d());
+  
+      /** Offset of the intake camera from the robot's center */
+      public static Translation2d INTAKE_CAM_TRANSLATION =
+          new Translation2d(
+              Units.inchesToMeters(14),
+              0); // TODO should this be negative, since the intake is in the back?
+  
+      /** Ofset of the intake's center from the robot's center */
+      public static Translation2d INTAKE_TRANSLATION =
+          new Translation2d(
+              Units.inchesToMeters(-24),
+              0); // TODO should this be negative, since the intake is in the back?
+  
+      public static double INTAKE_H_FOV = Units.degreesToRadians(69);
+      public static double INTAKE_DETECTION_DISTANCE = Units.inchesToMeters(1.0);
+  
+      public static double MIN_SHOOTING_DISTANCE = Units.feetToMeters(5);
+      public static double MAX_SHOOTING_DISTANCE = Units.feetToMeters(20);
+  
+      public static String VISION_SERVER_IP = "10.42.1.12";
+      public static String LIMELIGHT_IP = "10.42.1.11";
+    }
   }
+
+public static final class Vision {
+    public enum CAMERA_TYPE {
+      OAK,
+      LIMELIGHT,
+      PHOTONVISION
+    }
+
+    public enum CAMERA_POSITION {
+      GOAL,
+      INTAKE,
+      LIMELIGHT
+    }
+
+    public enum INTAKE_TRACKING_TYPE {
+      CARGO,
+      LAUNCHPAD
+    }
+
+    //    public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 27.0; // Landing
+    public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 32.0; // Takeoff
+    public static double GOAL_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
+    public static double LIMELIGHT_MOUNTING_ANGLE_DEGREES = 36.0;
+    public static double LIMELIGHT_MOUNTING_HEIGHT_METERS = Units.inchesToMeters(38.0);
+    public static double INTAKE_CAMERA_MOUNTING_ANGLE_DEGREES = 34.3;
+    public static double INTAKE_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
+    public static double UPPER_HUB_HEIGHT_METERS = Units.inchesToMeters(104.0);
+    public static double UPPER_HUB_RADIUS_METERS = Units.feetToMeters(2);
+    public static double LOWER_HUB_HEIGHT_METERS = Units.inchesToMeters(41);
+    public static double LOWER_HUB_RADIUS_METERS = Units.inchesToMeters(30.0625);
+    public static double CARGO_RADIUS = Units.inchesToMeters(4.75);
+
+    public static double TRAJECTORY_MAX_CARGO_DISTANCE = Units.inchesToMeters(30);
+    public static double TRAJECTORY_CARGO_POSITION_TOLERANCE = Units.feetToMeters(1.0);
+
+    public static final Pose2d CARGO_TARMAC_ONE = new Pose2d(7.64, 0.37, new Rotation2d());
+    public static final Pose2d CARGO_TARMAC_TWO = new Pose2d(4.64, 2.29, new Rotation2d());
+    public static final Pose2d CARGO_TERMINAL = new Pose2d(0.456, 0.81, new Rotation2d());
+
+    public static Pose2d HUB_POSE =
+        new Pose2d(Units.feetToMeters(27), Units.feetToMeters(13.5), new Rotation2d());
+
+    /** Offset of the intake camera from the robot's center */
+    public static Translation2d INTAKE_CAM_TRANSLATION =
+        new Translation2d(
+            Units.inchesToMeters(14),
+            0); // TODO should this be negative, since the intake is in the back?
+
+    /** Ofset of the intake's center from the robot's center */
+    public static Translation2d INTAKE_TRANSLATION =
+        new Translation2d(
+            Units.inchesToMeters(-24),
+            0); // TODO should this be negative, since the intake is in the back?
+
+    public static double INTAKE_H_FOV = Units.degreesToRadians(69);
+    public static double INTAKE_DETECTION_DISTANCE = Units.inchesToMeters(1.0);
+
+    public static double MIN_SHOOTING_DISTANCE = Units.feetToMeters(5);
+    public static double MAX_SHOOTING_DISTANCE = Units.feetToMeters(20);
+
+    public static String VISION_SERVER_IP = "10.42.1.12";
+    public static String LIMELIGHT_IP = "10.42.1.11";
+  }
+  
+  
 
   public static final class SwerveModule {
     public static final double kDriveMotorGearRatio = 6.12;
@@ -113,4 +342,10 @@ public final class Constants {
     public static final double kvTurnVoltSecondsPerRadian = 1.47; // originally 1.5
     public static final double kaTurnVoltSecondsSquaredPerRadian = 0.348; // originally 0.3
   }
+
+    // 1 = closed-loop control (using sensor feedback) and 0 = open-loop control (no sensor feedback)
+    public enum CONTROL_MODE {
+      OPENLOOP,
+      CLOSEDLOOP
+    }
 }

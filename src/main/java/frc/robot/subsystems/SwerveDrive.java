@@ -14,6 +14,7 @@ import com.ctre.phoenix.unmanaged.Unmanaged;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -169,6 +170,10 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
+  public SwerveDrivePoseEstimator getOdometry() {
+    return m_odometry;
+  }
+
   public void updateOdometry() {
     m_odometry.update(
         getHeadingRotation2d(),
@@ -186,6 +191,7 @@ public class SwerveDrive extends SubsystemBase {
               module.getHeadingRotation2d().plus(getHeadingRotation2d())));
     }
   }
+  
 
   private void updateSmartDashboard() {}
 

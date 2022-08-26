@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardTab;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.utils.PicoColorSensor;
 
 public class Indexer extends SubsystemBase {
   private final double kI_Zone = 1;
@@ -29,7 +28,6 @@ public class Indexer extends SubsystemBase {
   private final double maxAccel = 1e6;
   private final double gearRatio = 1.0 / 27.0;
   // public TCA9548AcolorSensor colorSensor = new TCA9548AcolorSensor(I2C.Port.kMXP);
-  private final PicoColorSensor colorSensor = new PicoColorSensor();
 
   private double voltageComp = 12.0;
 
@@ -178,37 +176,14 @@ public class Indexer extends SubsystemBase {
    * @param channel
    * @return color
    */
-  public Color getColor(int channel) {
-    //   if (colorSensor.getMuxChannel() != channel) colorSensor.selectMuxChannel(channel);
-    return channel == 1 ? colorSensor.getColor1() : colorSensor.getColor0();
-  }
 
   /**
    * Returns int based on color detection
    *
    * @return Color of cargo
    */
-  public DriverStation.Alliance getCargoColor(int channel) {
-    Color color = getColor(channel);
-    if (color.red > color.blue * 0.9 && color.red > color.green * 0.7) { //1.5, 0.7
-      return DriverStation.Alliance.Red;
-    } else if (color.blue > color.red * 0.7 && color.blue > color.green * 0.7) { //1.5
-      return DriverStation.Alliance.Blue;
-    } else return DriverStation.Alliance.Invalid;
-  }
 
   /** Calls cargo color from tripped sensor */
-  public void pollColorSensors() {
-    if (getIndexerFrontSensorTripped()) {
-      frontColorType = getCargoColor(0);
-      frontColor = getColor(0);
-    }
-    if (getIndexerRearSensorTripped()) {
-      rearColorType = getCargoColor(1);
-      rearColor = getColor(1);
-    }
-  }
-
   /**
    * color from front sensor
    *
@@ -274,10 +249,6 @@ public class Indexer extends SubsystemBase {
     SmartDashboardTab.putNumber("Indexer", "Rear Red", getRearColor().red);
     SmartDashboardTab.putNumber("Indexer", "Rear Green", getRearColor().green);
     SmartDashboardTab.putNumber("Indexer", "Rear Blue", getRearColor().blue);
-    SmartDashboardTab.putBoolean(
-        "Indexer", "Front Color Connected", colorSensor.isSensor0Connected());
-    SmartDashboardTab.putBoolean(
-        "Indexer", "Rear Color Connected", colorSensor.isSensor1Connected());
 
     SmartDashboardTab.putNumber(
         "Indexer",
