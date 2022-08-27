@@ -125,7 +125,7 @@ public class Indexer extends SubsystemBase {
     // indexerMotor.set(output); // Jango
   }
 
-   /**
+  /**
    * Sets the power for the ejectpr motor
    *
    * @param output value for the power of the ejector motor
@@ -175,15 +175,28 @@ public class Indexer extends SubsystemBase {
    *
    * @param channel
    * @return color
+   *     <p>public Color getColor(int channel) { // if (colorSensor.getMuxChannel() != channel)
+   *     colorSensor.selectMuxChannel(channel); return channel == 1 ? colorSensor.getColor1() :
+   *     colorSensor.getColor0(); }
    */
-
   /**
    * Returns int based on color detection
    *
    * @return Color of cargo
    */
-
-  /** Calls cargo color from tripped sensor */
+  /**
+   * public DriverStation.Alliance getCargoColor(int channel) { Color color = getColor(channel); if
+   * (color.red > color.blue * 0.9 && color.red > color.green * 0.7) { //1.5, 0.7 return
+   * DriverStation.Alliance.Red; } else if (color.blue > color.red * 0.7 && color.blue > color.green
+   * * 0.7) { //1.5 return DriverStation.Alliance.Blue; } else return
+   * DriverStation.Alliance.Invalid; }
+   */
+  /**
+   * Calls cargo color from tripped sensor public void pollColorSensors() { if
+   * (getIndexerFrontSensorTripped()) { frontColorType = getCargoColor(0); frontColor = getColor(0);
+   * } if (getIndexerRearSensorTripped()) { rearColorType = getCargoColor(1); rearColor =
+   * getColor(1); } }
+   */
   /**
    * color from front sensor
    *
@@ -249,7 +262,6 @@ public class Indexer extends SubsystemBase {
     SmartDashboardTab.putNumber("Indexer", "Rear Red", getRearColor().red);
     SmartDashboardTab.putNumber("Indexer", "Rear Green", getRearColor().green);
     SmartDashboardTab.putNumber("Indexer", "Rear Blue", getRearColor().blue);
-
     SmartDashboardTab.putNumber(
         "Indexer",
         "Indexer Speed",

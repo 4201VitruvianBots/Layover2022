@@ -44,7 +44,6 @@ public final class Constants {
     public static final int climbPistonReverse = pcmType == PneumaticsModuleType.CTREPCM ? 3 : 3;
   }
 
-
   public static final class CAN {
     public static final int pigeon = 9;
 
@@ -62,6 +61,7 @@ public final class Constants {
     public static final int backRightDriveMotor = 26;
     public static final int backRightTurnMotor = 27;
   }
+
   public static final class Indexer {
     public static final int ejectorMotor = 34;
     public static final int indexerMotor = 35;
@@ -79,6 +79,7 @@ public final class Constants {
 
     public static final double falconMaxSpeedRadPerSecond = Conversions.RpmToRadPerSec(6380);
   }
+
   public final class Intake {
     public static final int intakeMotor = 30;
     public static final int intakeRollerMotor = 31;
@@ -147,7 +148,6 @@ public final class Constants {
     public static final double gearRatio = (60.0 / 16.0) * (170.0 / 16.0);
   }
 
- 
   public static final class SwerveDrive {
     public static final double kTrackWidth = Units.inchesToMeters(30);
     public static final double kWheelBase = Units.inchesToMeters(30);
@@ -196,18 +196,18 @@ public final class Constants {
         LIMELIGHT,
         PHOTONVISION
       }
-  
+
       public enum CAMERA_POSITION {
         GOAL,
         INTAKE,
         LIMELIGHT
       }
-  
+
       public enum INTAKE_TRACKING_TYPE {
         CARGO,
         LAUNCHPAD
       }
-  
+
       //    public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 27.0; // Landing
       public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 32.0; // Takeoff
       public static double GOAL_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
@@ -220,41 +220,41 @@ public final class Constants {
       public static double LOWER_HUB_HEIGHT_METERS = Units.inchesToMeters(41);
       public static double LOWER_HUB_RADIUS_METERS = Units.inchesToMeters(30.0625);
       public static double CARGO_RADIUS = Units.inchesToMeters(4.75);
-  
+
       public static double TRAJECTORY_MAX_CARGO_DISTANCE = Units.inchesToMeters(30);
       public static double TRAJECTORY_CARGO_POSITION_TOLERANCE = Units.feetToMeters(1.0);
-  
+
       public static final Pose2d CARGO_TARMAC_ONE = new Pose2d(7.64, 0.37, new Rotation2d());
       public static final Pose2d CARGO_TARMAC_TWO = new Pose2d(4.64, 2.29, new Rotation2d());
       public static final Pose2d CARGO_TERMINAL = new Pose2d(0.456, 0.81, new Rotation2d());
-  
+
       public static Pose2d HUB_POSE =
           new Pose2d(Units.feetToMeters(27), Units.feetToMeters(13.5), new Rotation2d());
-  
+
       /** Offset of the intake camera from the robot's center */
       public static Translation2d INTAKE_CAM_TRANSLATION =
           new Translation2d(
               Units.inchesToMeters(14),
               0); // TODO should this be negative, since the intake is in the back?
-  
+
       /** Ofset of the intake's center from the robot's center */
       public static Translation2d INTAKE_TRANSLATION =
           new Translation2d(
               Units.inchesToMeters(-24),
               0); // TODO should this be negative, since the intake is in the back?
-  
+
       public static double INTAKE_H_FOV = Units.degreesToRadians(69);
       public static double INTAKE_DETECTION_DISTANCE = Units.inchesToMeters(1.0);
-  
+
       public static double MIN_SHOOTING_DISTANCE = Units.feetToMeters(5);
       public static double MAX_SHOOTING_DISTANCE = Units.feetToMeters(20);
-  
+
       public static String VISION_SERVER_IP = "10.42.1.12";
       public static String LIMELIGHT_IP = "10.42.1.11";
     }
   }
 
-public static final class Vision {
+  public static final class Vision {
     public enum CAMERA_TYPE {
       OAK,
       LIMELIGHT,
@@ -316,8 +316,6 @@ public static final class Vision {
     public static String VISION_SERVER_IP = "10.42.1.12";
     public static String LIMELIGHT_IP = "10.42.1.11";
   }
-  
-  
 
   public static final class SwerveModule {
     public static final double kDriveMotorGearRatio = 6.12;
@@ -343,9 +341,9 @@ public static final class Vision {
     public static final double kaTurnVoltSecondsSquaredPerRadian = 0.348; // originally 0.3
   }
 
-    // 1 = closed-loop control (using sensor feedback) and 0 = open-loop control (no sensor feedback)
-    public enum CONTROL_MODE {
-      OPENLOOP,
-      CLOSEDLOOP
-    }
+  // 1 = closed-loop control (using sensor feedback) and 0 = open-loop control (no sensor feedback)
+  public enum CONTROL_MODE {
+    OPENLOOP,
+    CLOSEDLOOP
+  }
 }

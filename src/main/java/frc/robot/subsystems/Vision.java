@@ -528,9 +528,10 @@ public class Vision extends SubsystemBase {
             m_turret.getTurretRotation2d().minus(m_drivetrain.getHeadingRotation2d()).getRadians());
     // robotVelocity =
     //     (m_drivetrain.getSpeedsMetersPerSecond().leftMetersPerSecond
-    //             + m_drivetrain.getSpeedsMetersPerSecond().rightMetersPerSecond) TODO: Find Speed of Robot
+    //             + m_drivetrain.getSpeedsMetersPerSecond().rightMetersPerSecond) TODO: Find Speed
+    // of Robot
     //         / 2.0;
-            m_drivetrain.getOdometry();
+    m_drivetrain.getOdometry();
     angularVelocity = 0;
     if (getValidTarget(CAMERA_POSITION.LIMELIGHT)) {
       angularVelocity =
