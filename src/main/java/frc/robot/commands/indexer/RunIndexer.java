@@ -35,7 +35,6 @@ public class RunIndexer extends CommandBase {
   @Override
   public void execute() {
     if (m_runKicker) m_indexer.setKickerPercentOutput(0.8);
-    else m_intake.setIntakeRollerPercentOutput(0.7);
 
     m_indexer.setIndexerPercentOutput(0.65);
   }
@@ -45,7 +44,6 @@ public class RunIndexer extends CommandBase {
   public void end(boolean interrupted) {
     m_indexer.setIndexerPercentOutput(0);
     if (m_runKicker) m_indexer.setKickerPercentOutput(0);
-    else m_intake.setIntakeRollerPercentOutput(0);
   }
 
   // Returns true when the command should end.
