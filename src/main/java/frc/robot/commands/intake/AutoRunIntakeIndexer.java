@@ -34,9 +34,7 @@ public class AutoRunIntakeIndexer extends CommandBase {
   @Override
   public void execute() {
     m_intake.setIntakePercentOutput(0.75);
-
-    if (!m_indexer.getIndexerRearSensorTripped()) m_indexer.setIndexerPercentOutput(0.55);
-    else m_indexer.setIndexerPercentOutput(0);
+    m_indexer.setIndexerPercentOutput(0.55);
     m_indexer.setKickerPercentOutput(-0.2);
   }
 

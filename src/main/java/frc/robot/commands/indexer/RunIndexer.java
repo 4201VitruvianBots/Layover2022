@@ -10,16 +10,12 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
 public class RunIndexer extends CommandBase {
-  private final Intake m_intake;
   private final Indexer m_indexer;
-  private final Flywheel m_flywheel;
   private final boolean m_runKicker;
 
   /** Creates a new RunIndexer. */
   public RunIndexer(Intake intake, Indexer indexer, Flywheel flywheel, boolean runKicker) {
-    m_intake = intake;
     m_indexer = indexer;
-    m_flywheel = flywheel;
     m_runKicker = runKicker;
 
     // Use addRequirements() here to declare subsystem dependencies.
