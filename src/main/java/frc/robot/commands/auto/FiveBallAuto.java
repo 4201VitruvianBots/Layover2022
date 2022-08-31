@@ -11,39 +11,51 @@ import frc.robot.subsystems.SwerveDrive;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-// import frc.robot.Constants.DriveTrain.DriveTrainNeutralMode;
-// import frc.robot.commands.InterruptingCommand;
+import frc.robot.commands.swerve.SetSwerveNeutralMode;
+import frc.robot.commands.InterruptingCommand;
 // import frc.robot.commands.driveTrain.CargoTrajectoryRameseteCommand;
 // import frc.robot.commands.driveTrain.DriveToCargoTrajectory;
-// import frc.robot.commands.driveTrain.SetDriveTrainNeutralMode;
-// import frc.robot.commands.driveTrain.SetOdometry;
-// import frc.robot.commands.flywheel.SetAndHoldRpmSetpoint;
-// import frc.robot.commands.indexer.AutoRunIndexer;
-// import frc.robot.commands.intake.AutoRunIntake;
-// import frc.robot.commands.intake.AutoRunIntakeIndexer;
-// import frc.robot.commands.intake.AutoRunIntakeInstant;
-// import frc.robot.commands.intake.AutoRunIntakeOnly;
-// import frc.robot.commands.intake.IntakePiston;
+import frc.robot.commands.swerve.SetSwerveNeutralMode;
+import frc.robot.commands.swerve.SetSwerveOdometry;
+import frc.robot.commands.flywheel.SetAndHoldRpmSetpoint;
+import frc.robot.commands.indexer.AutoRunIndexer;
+import frc.robot.commands.intake.AutoRunIntake;
+import frc.robot.commands.intake.AutoRunIntakeIndexer;
+import frc.robot.commands.intake.AutoRunIntakeInstant;
+import frc.robot.commands.intake.AutoRunIntakeOnly;
+import frc.robot.commands.intake.IntakePiston;
 // import frc.robot.commands.simulation.SetSimTrajectory;
 // import frc.robot.commands.simulation.SimulationShoot;
-// import frc.robot.commands.turret.AutoUseVisionCorrection;
-// import frc.robot.commands.turret.SetTurretAbsoluteSetpointDegrees;
-// import frc.robot.simulation.FieldSim;
-// import frc.robot.subsystems.DriveTrain;
-// import frc.robot.subsystems.Flywheel;
-// import frc.robot.subsystems.Indexer;
-// import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.Turret;
-// import frc.robot.subsystems.Vision;
-// import frc.vitruvianlib.utils.TrajectoryUtils;
+import frc.robot.commands.turret.AutoUseVisionCorrection;
+import frc.robot.commands.turret.SetTurretAbsoluteSetpointDegrees;
+import frc.robot.simulation.FieldSim;
+import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
+// import frc.vitruvianlib.utils.TrajectoryUtils; --> TODO: do we need a ramsete command for swerve?
 
 
 public class FiveBallAuto extends SequentialCommandGroup {
-  public FiveBallAuto(SwerveDrive swerveDrive) {
-    PathPlannerTrajectory trajectory1 =
+
+  public FiveBallAuto(
+    SwerveDrive swerveDrive,
+    FieldSim fieldSim,
+    Intake intake,
+    Indexer indexer,
+    Flywheel flywheel,
+    Turret turret,
+    Vision vision) {
+    
+        PathPlannerTrajectory trajectory1 =
         PathPlanner.loadPath(
             "FiveBallAuto-1", Units.feetToMeters(2), Units.feetToMeters(2), false);
     PathPlannerTrajectory trajectory2 =
@@ -96,66 +108,66 @@ public class FiveBallAuto extends SequentialCommandGroup {
             swerveDrive::setSwerveModuleStatesAuto,
             swerveDrive);
     addCommands(
-        // new InstantCommand(() -> swerveDrive.setOdometry(trajectory1.getInitialPose())),
+        new InstantCommand(() -> swerveDrive.setOdometry(trajectory1.getInitialPose())),
         // new SetSimTrajectory(fieldSim, trajectory1, trajectory2, trajectory3),
-        // new SetOdometry(driveTrain, fieldSim, trajectory1.getInitialPose()),
-        // new SetDriveTrainNeutralMode(driveTrain, DriveTrainNeutralMode.BRAKE),
+        new SetSwerveOdometry(swerveDrive, fieldSim, trajectory1.getInitialPose()),
+        new SetSwerveNeutralMode(swerveDrive, NeutralMode.Brake),
         
         // Path 1 + intake 1 cargo 
-        // new IntakePiston(intake, true),
-        // new SetAndHoldRpmSetpoint(flywheel, vision, 1600),
-        // new ParallelDeadlineGroup(
-            //new InterruptingCommand(
-                 command1,//.andThen(() -> driveTrain.setMotorTankDrive(0, 0)),
-            // new AutoRunIntakeIndexer(intake, indexer),
-        //     new SetTurretAbsoluteSetpointDegrees(turret, 0)),
-        // new IntakePiston(intake, false),
+        new IntakePiston(intake, true),
+        new SetAndHoldRpmSetpoint(flywheel, vision, 1600),
+        new ParallelDeadlineGroup(
+                 command1.andThen(()-> swerveDrive.drive(0,0,0,false,false)),
+            new AutoRunIntakeIndexer(intake, indexer),
+            new SetTurretAbsoluteSetpointDegrees(turret, 0)),
+        new IntakePiston(intake, false),
 
-        // // Shoot 2
-        // new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
-        // new ConditionalCommand(
-        //     new AutoRunIndexer(indexer, flywheel, 0.8).withTimeout(0.9),
-        //     new SimulationShoot(fieldSim, true).withTimeout(0.9),
-        //     RobotBase::isReal),
+        // Shoot 2
+        new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
+        //new ConditionalCommand(
+            new AutoRunIndexer(indexer, 0.8).withTimeout(0.9),
+            // new SimulationShoot(fieldSim, true).withTimeout(0.9),
+            // RobotBase::isReal,
         
-        // // Path 2 + intake 1 cargo
-        // new IntakePiston(intake, true),
-        // new SetAndHoldRpmSetpoint(flywheel, vision, 1700),
-        // new ParallelDeadlineGroup(
-        //     new InterruptingCommand(
-                command2,//.andThen(() -> driveTrain.setMotorTankDrive(0, 0)),
-        //     new AutoRunIntake(intake, indexer),
-        //     // need this (SetTurret command) here?
-        //     new SetTurretAbsoluteSetpointDegrees(turret, 20)),
-        // new IntakePiston(intake, false),
+        // Path 2 + intake 1 cargo
+        new IntakePiston(intake, true),
+        new SetAndHoldRpmSetpoint(flywheel, vision, 1700),
+        new ParallelDeadlineGroup(
+                command2.andThen(() -> swerveDrive.drive(0,0,0,false,false)),
+            new AutoRunIntake(intake, indexer),
+            // need this (SetTurret command) here?
+            new SetTurretAbsoluteSetpointDegrees(turret, 20)),
+        new IntakePiston(intake, false),
 
-        // // Shoot 1
-        // new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
+        // Shoot 1
+        new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
         // new ConditionalCommand(
-        //     new AutoRunIndexer(indexer, flywheel, 0.8).withTimeout(0.7),
-        //     new SimulationShoot(fieldSim, true).withTimeout(0.9),
-        //     RobotBase::isReal),
+            new AutoRunIndexer(indexer, 0.8).withTimeout(0.7),
+            // new SimulationShoot(fieldSim, true).withTimeout(0.9),
+            // RobotBase::isReal,
 
-        // // Path 3 + run intake + wait for human player (collect 2 cargo) --> already getting general range of hub
-        // new SetAndHoldRpmSetpoint(flywheel, vision, 1700),
-        // new SetTurretAbsoluteSetpointDegrees(turret, 30).withTimeout(0.25),
-        // new IntakePiston(intake, true),
-        // new AutoRunIntakeInstant(intake, indexer, true),
-        //new ParallelDeadlineGroup(
-                command3,//.andThen(() -> driveTrain.setMotorTankDrive(0, 0))
-                // new AutoRunIntakeIndexer(intake, indexer).withTimeout(1)), // change this to 1.5? more time at the terminal (?)
-        // new IntakePiston(intake, false),
+        // Path 3 + run intake + wait for human player (collect 2 cargo) --> already getting general range of hub
+        new SetAndHoldRpmSetpoint(flywheel, vision, 1700),
+        new SetTurretAbsoluteSetpointDegrees(turret, 30).withTimeout(0.25),
+        new IntakePiston(intake, true),
+        new AutoRunIntakeInstant(intake, indexer, true),
+        new ParallelDeadlineGroup(
+                command3.andThen(() -> swerveDrive.drive(0,0,0,false,false)),
+                new AutoRunIntakeIndexer(intake, indexer).withTimeout(1)), // change this to 1.5? more time at the terminal (?)
+        new IntakePiston(intake, false),
 
-        // // Path 4 + shoot 2
-        command4//.andThen(() -> driveTrain.setMotorTankDrive(0, 0)),
-        // new IntakePiston(intake, false),
-        // new AutoUseVisionCorrection(turret, vision).withTimeout(0.75),
-        // new ParallelDeadlineGroup(
-        //     new ConditionalCommand(
-        //         new AutoRunIndexer(indexer, flywheel, 0.80).withTimeout(5.0),
-        //         new SimulationShoot(fieldSim, true).withTimeout(5.0),
-        //         RobotBase::isReal),
-        //     new AutoRunIntakeOnly(intake))
-    );
+        // Path 4 + shoot 2
+        command4.andThen(()->swerveDrive.drive(0,0,0,false,false)),
+        new IntakePiston(intake, false),
+        new AutoUseVisionCorrection(turret, vision).withTimeout(0.75),
+        new ParallelCommandGroup(
+            // new ConditionalCommand
+                new AutoRunIndexer(indexer, 0.8).withTimeout(5.0),
+                // new SimulationShoot(fieldSim, true).withTimeout(5.0),
+                //RobotBase::isReal,
+            new AutoRunIntakeOnly(intake)));
   }
 }
+
+// TODO: do we need robotbase :: is real ?
+
