@@ -16,8 +16,19 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.SetSwerveDrive;
 import frc.robot.commands.auto.DriveForward;
+import frc.robot.commands.auto.ThreeBallAuto;
+// import frc.robot.commands.climber.EngageHighClimb;
+// import frc.robot.commands.climber.SetClimbState;
+// import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.simulation.FieldSim;
+// import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Controls;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,10 +40,16 @@ public class RobotContainer {
   private final DataLog m_logger = DataLogManager.getLog();
 
   // The robot's subsystems and commands are defined here...
+  private final Controls m_controls = new Controls();
   private final SwerveDrive m_swerveDrive = new SwerveDrive();
-
+  private final Turret m_turret = new Turret(m_swerveDrive);
+  private final Vision m_vision = new Vision(m_controls, m_swerveDrive, m_turret, m_logger);
+  private final Flywheel m_flywheel = new Flywheel(m_vision, m_turret);
+  private final Intake m_intake = new Intake();
+  private final Indexer m_indexer = new Indexer();
   private final SendableChooser<Command> m_autoChooser = new SendableChooser<Command>();
-
+  // private final Climber m_climber = new Climber();
+  
   private final FieldSim m_fieldSim = new FieldSim(m_swerveDrive);
 
   static Joystick leftJoystick = new Joystick(Constants.USB.leftJoystick);
@@ -68,6 +85,9 @@ public class RobotContainer {
             () -> leftJoystick.getRawAxis(0),
             () -> rightJoystick.getRawAxis(0)));
     m_fieldSim.initSim();
+
+    // m_climber.setDefaultCommand(
+    //   new SetClimberOutput(m_climber, () -> xBoxController.getRawAxis(5)));
   }
 
   /**
@@ -85,11 +105,17 @@ public class RobotContainer {
       xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
     for (int i = 0; i < xBoxPOVButtons.length; i++)
       xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 90));
+
+
+      //Climber
+      // xBoxButtons[2].whenPressed(new EngageHighClimb(m_climber));
+      // xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true));
   }
 
   private void initializeAutoChooser() {
     m_autoChooser.setDefaultOption("Do Nothing", new WaitCommand(0));
     m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive));
+    m_autoChooser.addOption("Three Ball Auto", new ThreeBallAuto(m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
 
     SmartDashboard.putData("Auto Selector", m_autoChooser);
   }
@@ -114,12 +140,16 @@ public class RobotContainer {
 
   public void disabledPeriodic() {}
 
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    // m_climber.setHoldPosition(m_climber.getElevatorClimbPosition());
+  }
 
   public void autonomousPeriodic() {}
 
   public void teleopInit() {
     m_swerveDrive.setNeutralMode(NeutralMode.Brake);
+    // m_climber.setClimberNeutralMode(NeutralMode.Brake);
+    // m_climber.setHoldPosition(m_climber.getElevatorClimbPosition());
   }
 
   public void teleopPeriodic() {}
