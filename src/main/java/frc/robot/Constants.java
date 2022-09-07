@@ -39,9 +39,8 @@ public final class Constants {
 
     public static final int intakePistonForward = pcmType == PneumaticsModuleType.CTREPCM ? 0 : 0;
     public static final int intakePistonReverse = pcmType == PneumaticsModuleType.CTREPCM ? 1 : 1;
-    public static final int climbPistonForward = pcmType == PneumaticsModuleType.CTREPCM ? 2 : 2;
-    public static final int climbPistonReverse = pcmType == PneumaticsModuleType.CTREPCM ? 3 : 3;
   }
+
   public final class Climber {
     public static final int climbMotorA = 50;
     public static final int climbMotorB = 51;
@@ -71,6 +70,7 @@ public final class Constants {
 
     public static final double maxSpeedLimitsPercent = 0.2;
   }
+
   public static final class CAN {
     public static final int pigeon = 9;
 
