@@ -13,8 +13,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.utils.Conversions;
+import frc.robot.utils.LinearInterpolationTable;
 import frc.robot.utils.ModuleMap;
 import java.util.Map;
+import java.awt.geom.Point2D;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -114,6 +116,33 @@ public final class Constants {
   }
 
   public final class Flywheel {
+    private static final Point2D[] kRPMPoints = new Point2D.Double[] {
+      // (ty-angle,distance)
+      new Point2D.Double(35, 1500),
+      new Point2D.Double(55, 1860),
+      new Point2D.Double(80, 2000), //
+      new Point2D.Double(105, 2100), //
+      new Point2D.Double(130, 2170), //
+      new Point2D.Double(155, 2245), //
+      new Point2D.Double(180, 2460), //
+      new Point2D.Double(205, 2670), //
+      new Point2D.Double(230, 2840), //
+      new Point2D.Double(255, 2980), //
+      new Point2D.Double(280, 3350)
+
+  };
+    public static final LinearInterpolationTable kRPMTable = new LinearInterpolationTable(kRPMPoints);
+
+    private static final Point2D[] kShotTimes = new Point2D.Double[] {
+        // (ty-angle,time)
+        new Point2D.Double(80, 0.78),
+        new Point2D.Double(130, 0.80),
+        new Point2D.Double(190, 0.81),
+        new Point2D.Double(240, 0.82),
+        new Point2D.Double(280, 0.83)
+    };
+    public static final LinearInterpolationTable kTimeTable = new LinearInterpolationTable(kShotTimes);
+
     public static final int flywheelMotorA = 40;
     public static final int flywheelMotorB = 41;
     public static final double hubToleranceDegrees = 3.0;
@@ -138,6 +167,8 @@ public final class Constants {
     public static final double rpmTolerance = 60.0;
 
     public static final double gearRatio = 1.0;
+    
+    public static final double kAccelCompFactor = 0.100; // in units of seconds
   }
 
   public static final class Turret {
@@ -176,6 +207,8 @@ public final class Constants {
   }
 
   public static final class SwerveDrive {
+    
+    public static final double kLoopTime = 0.020;
     public static final double kTrackWidth = Units.inchesToMeters(30);
     public static final double kWheelBase = Units.inchesToMeters(30);
 

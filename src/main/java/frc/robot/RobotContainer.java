@@ -19,6 +19,7 @@ import frc.robot.commands.auto.DriveForward;
 import frc.robot.commands.auto.ThreeBallAuto;
 import frc.robot.commands.climber.SetClimbState;
 import frc.robot.commands.climber.SetClimberOutput;
+import frc.robot.commands.turret.SetTurretSetpointFieldAbsolute;
 import frc.robot.simulation.FieldSim;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Controls;
@@ -71,6 +72,7 @@ public class RobotContainer {
   }
 
   public void initializeSubsystems() {
+    m_turret.setVision(m_vision);
     // m_swerveDrive.setDefaultCommand(
     //     new SetSwerveDrive(
     //         m_swerveDrive,
@@ -94,6 +96,9 @@ public class RobotContainer {
 
     // m_climber.setDefaultCommand(
     //   new SetClimberOutput(m_climber, () -> xBoxController.getRawAxis(5)));
+    m_turret.setDefaultCommand(
+      new SetTurretSetpointFieldAbsolute(
+          m_turret, m_swerveDrive, m_vision, m_flywheel, m_climber, xBoxController));
   }
 
   /**

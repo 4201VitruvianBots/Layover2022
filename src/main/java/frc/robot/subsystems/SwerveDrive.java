@@ -23,7 +23,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CAN;
+import frc.robot.utils.FieldRelativeAccel;
+import frc.robot.utils.FieldRelativeSpeed;
 import frc.robot.utils.ModuleMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +66,9 @@ public class SwerveDrive extends SubsystemBase {
                       backRightCANCoderOffset)));
 
   private final Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon);
+  private FieldRelativeSpeed m_fieldRelVel = new FieldRelativeSpeed();
+  private FieldRelativeSpeed m_lastFieldRelVel = new FieldRelativeSpeed();
+  private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();;
 
   private final SwerveDrivePoseEstimator m_odometry =
       new SwerveDrivePoseEstimator(
@@ -124,6 +130,20 @@ public class SwerveDrive extends SubsystemBase {
   public void setOdometry(Pose2d pose) {
     m_odometry.resetPosition(pose, pose.getRotation());
     m_pigeon.setYaw(pose.getRotation().getDegrees());
+  }
+
+  public ChassisSpeeds getChassisSpeed() {
+    return kSwerveKinematics.toChassisSpeeds(m_swerveModules.get(ModulePosition.FRONT_LEFT).getState(), m_swerveModules.get(ModulePosition.FRONT_RIGHT).getState(),
+    m_swerveModules.get(ModulePosition.BACK_LEFT).getState(),
+    m_swerveModules.get(ModulePosition.BACK_RIGHT).getState());
+  }
+
+  public FieldRelativeSpeed getFieldRelativeSpeed(){
+    return m_fieldRelVel;
+  }
+  
+  public FieldRelativeAccel getFieldRelativeAccel() {
+    return m_fieldRelAccel;
   }
 
   public double getHeadingDegrees() {
@@ -197,6 +217,9 @@ public class SwerveDrive extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     updateSmartDashboard();
+    m_fieldRelVel = new FieldRelativeSpeed(getChassisSpeed(), getHeadingRotation2d());
+    m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, Constants.SwerveDrive.kLoopTime);
+    m_lastFieldRelVel = m_fieldRelVel;
   }
 
   @Override

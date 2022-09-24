@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -17,10 +18,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROL_MODE;
+import frc.robot.Constants.Vision.CAMERA_POSITION;
+import frc.robot.utils.MathUtils;
 
 public class Turret extends SubsystemBase {
   private final SwerveDrive m_driveTrain;
-
+  private Vision m_vision; 
   private final TalonFX turretMotor = new TalonFX(Constants.Turret.turretMotor);
   private final DigitalInput turretHomeSensor = new DigitalInput(Constants.Turret.turretHomeSensor);
 
@@ -30,6 +33,8 @@ public class Turret extends SubsystemBase {
   private boolean usePoseEstimation = true;
 
   private double arbitraryFF;
+  
+  private double m_desiredAngle = 0.0;
 
   private boolean initialHome;
   private boolean turretHomeSensorLatch = false;
@@ -54,6 +59,10 @@ public class Turret extends SubsystemBase {
     turretMotor.configMotionAcceleration(Constants.Turret.kMotionAcceleration);
     turretMotor.configAllowableClosedloopError(0, Constants.Turret.kErrorBand);
     //    turretMotor.setSensorPhase(true);
+  }
+
+  public void setVision(Vision vision) {
+    m_vision = vision;
   }
 
   private void updateClosedLoopPosition() {
@@ -209,6 +218,29 @@ public class Turret extends SubsystemBase {
 
   public void setTurretNeutralMode(NeutralMode mode) {
     turretMotor.setNeutralMode(mode);
+  }
+
+  public void aimAtGoal(Pose2d robotPose, Translation2d goal, boolean aimAtVision) {
+    Translation2d robotToGoal = goal.minus(robotPose.getTranslation());
+    double angle = Math.atan2(robotToGoal.getY(), robotToGoal.getX());
+    angle = Math.PI + angle - robotPose.getRotation().getRadians();
+
+    angle = MathUtils.toUnitCircAngle(angle);
+
+
+    SmartDashboard.putNumber("Turret Set Angle", angle);
+
+    if (aimAtVision && m_vision.getValidTarget(CAMERA_POSITION.LIMELIGHT)) {
+      angle = getTurretAngleDegrees() - m_vision.getTargetXAngle(CAMERA_POSITION.LIMELIGHT);
+    }
+
+    m_desiredAngle = angle;
+
+    if (angle < Constants.Turret.minAngle) {
+      angle = Constants.Turret.minAngle; 
+    } else if (angle > Constants.Turret.maxAngle) {
+      angle = Constants.Turret.maxAngle; 
+    }
   }
 
   private void updateShuffleboard() {
