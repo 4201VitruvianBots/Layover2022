@@ -19,6 +19,10 @@ import frc.robot.commands.auto.DriveForward;
 import frc.robot.commands.auto.ThreeBallAuto;
 import frc.robot.commands.climber.SetClimbState;
 import frc.robot.commands.climber.SetClimberOutput;
+import frc.robot.commands.indexer.RunIndexer;
+import frc.robot.commands.indexer.RunOnlyIndexer;
+import frc.robot.commands.intake.ReverseIntakeIndexer;
+import frc.robot.commands.intake.RunIntake;
 import frc.robot.simulation.FieldSim;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Controls;
@@ -112,6 +116,13 @@ public class RobotContainer {
     for (int i = 0; i < xBoxPOVButtons.length; i++)
       xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 90));
 
+
+      //Intake/Indexer
+      xBoxPOVButtons[2].whileHeld(new ReverseIntakeIndexer(m_intake, m_indexer));
+    // xBoxPOVButtons[0].whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, false));
+    xBoxLeftTrigger.whileHeld(new RunIntake(m_intake));
+    xBoxLeftTrigger.whileHeld(new RunOnlyIndexer(m_indexer));
+    // xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true));
     // Climber
     xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake));
   }
@@ -155,6 +166,7 @@ public class RobotContainer {
 
   public void teleopInit() {
     m_swerveDrive.setNeutralMode(NeutralMode.Brake);
+    m_intake.setIntakePiston(false);
     m_climber.setClimberNeutralMode(NeutralMode.Brake);
     m_climber.setHoldPosition(m_climber.getElevatorClimbPosition());
   }
