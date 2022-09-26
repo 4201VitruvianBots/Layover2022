@@ -30,6 +30,8 @@ import frc.robot.Constants.Vision.CAMERA_TYPE;
 import frc.robot.Constants.Vision.INTAKE_TRACKING_TYPE;
 import frc.robot.utils.VisionData;
 
+import java.util.Arrays;
+
 public class Vision extends SubsystemBase {
 
   private final Controls m_controls;
@@ -67,6 +69,11 @@ public class Vision extends SubsystemBase {
   double[] targetYAngles = new double[50];
   double[] targetDepth = new double[50];
 
+  int[] tagId = new int[50];
+  double[] xPoses = new double[50];
+  double[] yPoses = new double[50];
+  double[] zPoses = new double[50];
+
   MedianFilter limelightYFilter = new MedianFilter(5);
   LinearFilter cargoXFilter = LinearFilter.movingAverage(5);
   LinearFilter cargoYFilter = LinearFilter.movingAverage(5);
@@ -95,7 +102,8 @@ public class Vision extends SubsystemBase {
         break;
       case OAK:
       default:
-        goal_camera = NetworkTableInstance.getDefault().getTable("OAK-D_Goal");
+//        goal_camera = NetworkTableInstance.getDefault().getTable("OAK-D_Goal");:
+        goal_camera = NetworkTableInstance.getDefault().getTable("DepthAI");
         break;
     }
     limelight = NetworkTableInstance.getDefault().getTable("limelight");
@@ -521,6 +529,28 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  private void updateCameraRobotPoses(){
+    double[] defaultEntry = {0};
+
+    tagId = Arrays.stream(goal_camera.getEntry("Pose ID").getDoubleArray(defaultEntry)).mapToInt(i -> (int)i).toArray();
+    xPoses = goal_camera.getEntry("X Poses").getDoubleArray(defaultEntry);
+    yPoses = goal_camera.getEntry("Y Poses").getDoubleArray(defaultEntry);
+    zPoses = goal_camera.getEntry("Z Poses").getDoubleArray(defaultEntry);
+  }
+
+  public int[] getCameraRobotPoseIDs(){
+    return tagId;
+  }
+
+  public Pose2d[] getCameraRobotPoses(){
+    Pose2d[] poses = new Pose2d[xPoses.length];
+    for(int i =0; i < xPoses.length; i++){
+      poses[i] = new Pose2d(xPoses[i], yPoses[i], new Rotation2d());
+    }
+
+    return poses;
+  }
+
   /** Give the turret a feedforward value if the robot is moving. Based on 254's 2019 code */
   private void updateTurretArbitraryFF() {
     angle =
@@ -594,7 +624,7 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     updateSmartDashboard();
-
+    updateCameraRobotPoses();
     logData();
   }
 

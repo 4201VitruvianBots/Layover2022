@@ -49,7 +49,7 @@ public class RobotContainer {
   private final SendableChooser<Command> m_autoChooser = new SendableChooser<Command>();
   private final Climber m_climber = new Climber();
 
-  private final FieldSim m_fieldSim = new FieldSim(m_swerveDrive);
+  private final FieldSim m_fieldSim = new FieldSim(m_swerveDrive, m_vision);
 
   static Joystick leftJoystick = new Joystick(Constants.USB.leftJoystick);
   static Joystick rightJoystick = new Joystick(Constants.USB.rightJoystick);

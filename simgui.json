@@ -2,6 +2,8 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Controls/Set Alliance Blue": "Command",
+      "/Shuffleboard/Controls/Set Alliance Red": "Command",
       "/SmartDashboard/Auto Selector": "String Chooser",
       "/SmartDashboard/Field2d": "Field2d"
     },
@@ -22,6 +24,11 @@
           "visible": true
         }
       }
+    }
+  },
+  "NetworkTables": {
+    "DepthAI": {
+      "open": true
     }
   }
 }
