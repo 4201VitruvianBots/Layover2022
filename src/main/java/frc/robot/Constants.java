@@ -105,6 +105,10 @@ public final class Constants {
     public static final double radiansPerSecondTolerance = 1.0;
 
     public static final double falconMaxSpeedRadPerSecond = Conversions.RpmToRadPerSec(6380);
+
+    public static final String colorDetectionLimelightHostname = "limelight-indexer";
+    public static final int blueCargoDetectionLimelightPipeline = 0;
+    public static final int redCargoDetectionLimelightPipeline = 1;
   }
 
   public final class Intake {
