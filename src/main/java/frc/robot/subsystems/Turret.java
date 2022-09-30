@@ -55,7 +55,6 @@ public class Turret extends SubsystemBase {
     turretMotor.configAllowableClosedloopError(0, Constants.Turret.kErrorBand);
     //    turretMotor.setSensorPhase(true);
     // TODO TODO TODO TODO TODO REMOVE WHEN TURRET IS WORKING
-    setTurretLocked(true);
   }
 
   private void updateClosedLoopPosition() {

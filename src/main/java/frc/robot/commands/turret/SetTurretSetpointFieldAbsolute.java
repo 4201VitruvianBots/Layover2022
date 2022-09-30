@@ -4,7 +4,6 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-/*
 package frc.robot.commands.turret;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,13 +15,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
-/** An example command that uses an example subsystem. /*
+/** An example command that uses an example subsystem. */
 public class SetTurretSetpointFieldAbsolute extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Turret m_turret;
 
-  /*
-  private final DriveTrain m_driveTrain;
+  private final SwerveDrive m_driveTrain;
   private final Vision m_vision;
   private final Flywheel m_flywheel;
   private final Climber m_climber;
@@ -41,10 +39,9 @@ public class SetTurretSetpointFieldAbsolute extends CommandBase {
   private double lastVisionTimestamp;
 
   /** Creates a new ExampleCommand. */
-  /*
   public SetTurretSetpointFieldAbsolute(
       Turret turretSubsystem,
-      DriveTrain driveTrainSubsystem,
+      SwerveDrive driveTrainSubsystem,
       Vision visionSubsystem,
       Flywheel flywheel,
       Climber climber,
@@ -91,85 +88,85 @@ public class SetTurretSetpointFieldAbsolute extends CommandBase {
                   Math.atan2(m_controller.getRawAxis(0), -m_controller.getRawAxis(1)));
 
           m_turret.setAbsoluteSetpointDegrees(setpoint);
-        } else if (m_vision.getValidTarget(Constants.Vision.CAMERA_POSITION.LIMELIGHT)) {
-          usingVisionSetpoint = true;
-          // m_vision.setLimelightLEDState(true);
-          m_turret.setAbsoluteSetpointDegrees(
-              m_turret.getTurretAngleDegrees()
-                  + m_vision.getTargetXAngle(Constants.Vision.CAMERA_POSITION.LIMELIGHT));
-          lastVisionTimestamp = Timer.getFPGATimestamp();
-          // If we are estimating the hub's location using the pose of the hub and the robot
-        } /*else if (m_turret.usePoseEstimation()
-                      && Timer.getFPGATimestamp() - lastVisionTimestamp > 0.5) {
-                    Translation2d goalToRobot =
-                        m_vision
-                            .getHubPose()
-                            .getTranslation()
-                            .minus(m_driveTrain.getRobotPoseMeters().getTranslation());
-                    Rotation2d targetAngleRotation =
-                        new Rotation2d(Math.atan2(goalToRobot.getY(), goalToRobot.getX()));
-                    targetAngleRotation = targetAngleRotation.minus(m_driveTrain.getHeadingRotation2d());
-
-                    setpoint = targetAngleRotation.getDegrees();
-          +
-                    m_turret.setAbsoluteSetpointDegrees(setpoint);
-                    // if vision has a target and the joystick has not moved, set visionsetpoint to true and
-                    // run
-                    // the if statements below
-                  }*/
-        // else if vision doesn't have a target and the joysticks have not moved,
-        // set usingVisionSetpoint to false and turn off the LEDs if possible
-        /*
-                else if (!m_vision.getValidTarget(Constants.Vision.CAMERA_POSITION.LIMELIGHT)
+        } /***else if (m_vision.getValidTarget(Constants.Vision.CAMERA_POSITION.LIMELIGHT)) {
+           * usingVisionSetpoint = true;
+           * // m_vision.setLimelightLEDState(true);
+           * m_turret.setAbsoluteSetpointDegrees(
+           * m_turret.getTurretAngleDegrees()
+           * + m_vision.getTargetXAngle(Constants.Vision.CAMERA_POSITION.LIMELIGHT));
+           * lastVisionTimestamp = Timer.getFPGATimestamp();
+           **/
+        // TODO Uncomment this once we want vision to work
+        // If we are estimating the hub's location using the pose of the hub and the robot
+      } /*else if (m_turret.usePoseEstimation()
                     && Timer.getFPGATimestamp() - lastVisionTimestamp > 0.5) {
-                  usingVisionSetpoint = false;
-                  m_turret.setAbsoluteSetpointDegrees(0);
-                  // m_vision.setLimelightLEDState(false);
+                  Translation2d goalToRobot =
+                      m_vision
+                          .getHubPose()
+                          .getTranslation()
+                          .minus(m_driveTrain.getRobotPoseMeters().getTranslation());
+                  Rotation2d targetAngleRotation =
+                      new Rotation2d(Math.atan2(goalToRobot.getY(), goalToRobot.getX()));
+                  targetAngleRotation = targetAngleRotation.minus(m_driveTrain.getHeadingRotation2d());
 
-                }
+                  setpoint = targetAngleRotation.getDegrees();
+        +
+                  m_turret.setAbsoluteSetpointDegrees(setpoint);
+                  // if vision has a target and the joystick has not moved, set visionsetpoint to true and
+                  // run
+                  // the if statements below
+                }*/
+      // else if vision doesn't have a target and the joysticks have not moved,
+      // set usingVisionSetpoint to false and turn off the LEDs if possible
 
-                currentTurretSetpoint = Rotation2d.fromDegrees(m_turret.getTurretAngleDegrees());
+      else if (!m_vision.getValidTarget(Constants.Vision.CAMERA_POSITION.LIMELIGHT)
+          && Timer.getFPGATimestamp() - lastVisionTimestamp > 0.5) {
+        usingVisionSetpoint = false;
+        m_turret.setAbsoluteSetpointDegrees(0);
+        // m_vision.setLimelightLEDState(false);
 
-                // If no manual input is used and we're not using pose estimation, set the setpoint to the
-                // vision setpoint
-                // if (!joystickMoved && !m_turret.usePoseEstimation()) {
-                //   setpoint =
-                //       currentVisionSetpoint
-                //           .plus(currentTurretSetpoint)
-                //           .minus(currentRobotHeading.minus(lastRobotHeading))
-                //           .getDegrees();
+      }
 
-                //   m_turret.setAbsoluteSetpointDegrees(setpoint);
-                // }
+      currentTurretSetpoint = Rotation2d.fromDegrees(m_turret.getTurretAngleDegrees());
 
-                // lastVisionSetpoint = currentVisionSetpoint;
-                // lastTurretSetpoint = m_turret.getTurretRotation2d();
-                // lastRobotHeading = m_driveTrain.getHeadingRotation2d();
-              } else {
-                m_turret.setPercentOutput(-m_controller.getRawAxis(0) * 0.2);
-              }
-            }
+      // If no manual input is used and we're not using pose estimation, set the setpoint to the
+      // vision setpoint
+      // if (!joystickMoved && !m_turret.usePoseEstimation()) {
+      //   setpoint =
+      //       currentVisionSetpoint
+      //           .plus(currentTurretSetpoint)
+      //           .minus(currentRobotHeading.minus(lastRobotHeading))
+      //           .getDegrees();
 
-            // if the shooter can shoot, set the rumble to 0.4 on both sides of the controller, else set
-            // it to zero on both sides
-            if (m_flywheel.canShoot()) {
-              m_controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0.4);
-              m_controller.setRumble(GenericHID.RumbleType.kRightRumble, 0.4);
-            } else {
-              m_controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-              m_controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-            }
-          }
+      //   m_turret.setAbsoluteSetpointDegrees(setpoint);
+      // }
 
-          // Called once the command ends or is interrupted.
-          @Override
-          public void end(boolean interrupted) {}
+      // lastVisionSetpoint = currentVisionSetpoint;
+      // lastTurretSetpoint = m_turret.getTurretRotation2d();
+      // lastRobotHeading = m_driveTrain.getHeadingRotation2d();
+    } else {
+      m_turret.setPercentOutput(-m_controller.getRawAxis(0) * 0.2);
+    }
 
-          // Returns true when the command should end.
-          @Override
-          public boolean isFinished() {
-            return false;
-          }
-        }
-        */
+    // if the shooter can shoot, set the rumble to 0.4 on both sides of the controller, else set
+    // it to zero on both sides
+    if (m_flywheel.canShoot()) {
+      m_controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0.4);
+      m_controller.setRumble(GenericHID.RumbleType.kRightRumble, 0.4);
+    } else {
+      m_controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+      m_controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+    }
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+}
 // TODO: Fix error sin this command
