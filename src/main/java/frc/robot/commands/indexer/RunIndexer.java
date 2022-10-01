@@ -5,7 +5,7 @@
 package frc.robot.commands.indexer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.Flywheel;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
@@ -32,7 +32,7 @@ public class RunIndexer extends CommandBase {
   public void execute() {
     if (m_runKicker) m_indexer.setKickerPercentOutput(0.8);
 
-    m_indexer.setIndexerPercentOutput(0.65);
+    m_indexer.setIndexerPercentOutput(-0.65);
   }
 
   // Called once the command ends or is interrupted.

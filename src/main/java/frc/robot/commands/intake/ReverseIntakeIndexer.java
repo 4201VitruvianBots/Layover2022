@@ -47,7 +47,7 @@ public class ReverseIntakeIndexer extends CommandBase {
   @Override
   public void execute() {
     m_intake.setIntakePercentOutput(m_intakeSpeed);
-    m_indexer.setIndexerPercentOutput(-0.65);
+    m_indexer.setIndexerPercentOutput(0.65);
     m_indexer.setKickerPercentOutput(-0.35);
   }
 

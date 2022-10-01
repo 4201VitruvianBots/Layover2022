@@ -19,6 +19,15 @@ import frc.robot.commands.auto.DriveForward;
 import frc.robot.commands.auto.ThreeBallAuto;
 import frc.robot.commands.climber.SetClimbState;
 import frc.robot.commands.climber.SetClimberOutput;
+import frc.robot.commands.flywheel.SetRpmSetpoint;
+import frc.robot.commands.indexer.RunIndexer;
+import frc.robot.commands.indexer.RunOnlyIndexer;
+import frc.robot.commands.intake.ReverseIntakeIndexer;
+import frc.robot.commands.intake.RunIntake;
+import frc.robot.commands.turret.SetTurretAbsoluteSetpointDegrees;
+import frc.robot.commands.turret.SetTurretControlMode;
+import frc.robot.commands.turret.ToggleTurretControlMode;
+import frc.robot.commands.turret.ToggleTurretLock;
 import frc.robot.simulation.FieldSim;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Controls;
@@ -111,9 +120,36 @@ public class RobotContainer {
       xBoxButtons[i] = new JoystickButton(xBoxController, (i + 1));
     for (int i = 0; i < xBoxPOVButtons.length; i++)
       xBoxPOVButtons[i] = new POVButton(xBoxController, (i * 90));
+      xBoxLeftTrigger =
+      new Button(
+          () -> xBoxController.getLeftTriggerAxis() > 0.2); // getTrigger());// getRawAxis(2));
+  xBoxRightTrigger = new Button(() -> xBoxController.getRightTriggerAxis() > 0.2);
 
+  xBoxButtons[0].whileHeld(new SetRpmSetpoint(m_flywheel, m_vision, () -> m_flywheel.tarmacShot));
+  xBoxButtons[1].whileHeld(
+      new SetRpmSetpoint(m_flywheel, m_vision, () -> m_flywheel.launchpadShot));
+  // xBoxButtons[3].whileHeld(
+  //     new SetRpmSetpoint(
+  //         m_flywheel,
+  //         m_vision,
+  //         () ->
+  //             ShotSelecter.bestShot(
+  //                 m_vision.getGoalTargetHorizontalDistance(CAMERA_POSITION.LIMELIGHT))));
+
+  xBoxButtons[6].whenPressed(new ToggleTurretControlMode(m_turret));
+
+  xBoxButtons[7].whenPressed(new ToggleTurretLock(m_turret));
+
+  xBoxPOVButtons[2].whileHeld(new ReverseIntakeIndexer(m_intake, m_indexer));
+  xBoxPOVButtons[0].whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, false));
+  xBoxLeftTrigger.whileHeld(new RunIntake(m_intake));
+  xBoxLeftTrigger.whileHeld(new RunOnlyIndexer(m_indexer));
+  xBoxButtons[9].whenPressed(
+      new SetTurretAbsoluteSetpointDegrees(m_turret, 0)
+          .andThen(new SetTurretControlMode(m_turret, false)));
     // Climber
     xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake));
+    xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true));
   }
 
   private void initializeAutoChooser() {
