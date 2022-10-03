@@ -86,7 +86,7 @@ public class SetTurretSetpointFieldAbsolute extends CommandBase {
           // Convert joystick axis values to degrees setpoint
           setpoint =
               -Units.radiansToDegrees(
-                  Math.atan2(m_controller.getRawAxis(0), -m_controller.getRawAxis(1)));
+                  Math.atan2(-m_controller.getRawAxis(0), -m_controller.getRawAxis(1)));
 
           m_turret.setAbsoluteSetpointDegrees(setpoint);
         } else if (m_vision.getValidTarget(Constants.Vision.CAMERA_POSITION.LIMELIGHT)) {
@@ -148,7 +148,7 @@ public class SetTurretSetpointFieldAbsolute extends CommandBase {
                 && m_controller.getRawAxis(0) < 0)) {
           m_turret.setPercentOutput(0);
         } else {
-          m_turret.setPercentOutput(-m_controller.getRawAxis(0) * 0.2);
+          m_turret.setPercentOutput(m_controller.getRawAxis(0) * 0.2);
         }
       }
     }

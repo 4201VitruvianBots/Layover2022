@@ -176,7 +176,8 @@ public final class Constants {
     public static final double degreeTolerance = 3.0;
     public static final double degreesPerSecondTolerance = 10.0;
 
-    public static final double gearRatio = (60.0 / 16.0) * (170.0 / 16.0);
+    public static final double gearRatio = (34.0/16.0) * (170.0 / 16.0); 
+     //(60.0 / 16.0) * (170.0 / 16.0); TODO Figure out Turret Gear Ratio
   }
 
   public static final class SwerveDrive {
