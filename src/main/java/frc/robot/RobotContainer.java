@@ -145,7 +145,7 @@ public class RobotContainer {
 
     xBoxPOVButtons[2].whileHeld(new ReverseIntakeIndexer(m_intake, m_indexer));
     xBoxPOVButtons[0].whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, false));
-    xBoxLeftTrigger.whileHeld(new RunIntake(m_intake));
+    xBoxLeftTrigger.whileHeld(new RunIntake(m_intake, m_indexer));
     xBoxLeftTrigger.whileHeld(new RunOnlyIndexer(m_indexer));
     // xBoxButtons[9].whenPressed(
     //     new SetTurretAbsoluteSetpointDegrees(m_turret, 0)
