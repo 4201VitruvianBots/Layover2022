@@ -169,6 +169,10 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
+  public SwerveDrivePoseEstimator getOdometry() {
+    return m_odometry;
+  }
+
   public void updateOdometry() {
     m_odometry.update(
         getHeadingRotation2d(),
