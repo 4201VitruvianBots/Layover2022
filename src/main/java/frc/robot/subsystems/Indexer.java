@@ -124,15 +124,14 @@ public class Indexer extends SubsystemBase {
       setKickerPower(0);
     }
   }
+
   private void updateShuffleboard() {
     kickerSetpoint = SmartDashboard.getNumber("Kicker", kickerSetpoint);
-
   }
 
   @Override
   public void periodic() {
 
-    
     updateSetpoint();
     SmartDashboardTab.putNumber(
         "Indexer",

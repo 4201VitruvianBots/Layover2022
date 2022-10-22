@@ -13,9 +13,9 @@ public class ShotSelecter {
   //   new ShotRecipe(2050, .1, 6.53),
   // };
 
-    private static final ShotRecipe[] shotRecipes = {
+  private static final ShotRecipe[] shotRecipes = {
     new ShotRecipe(1550, .6, 2.80),
-    //new ShotRecipe(, .6,3.03),
+    // new ShotRecipe(, .6,3.03),
     new ShotRecipe(1650, .6, 3.85),
     new ShotRecipe(1780, .6, 4.87),
     new ShotRecipe(1850, .3, 5.55),
