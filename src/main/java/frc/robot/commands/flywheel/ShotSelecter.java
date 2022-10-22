@@ -5,12 +5,21 @@ package frc.robot.commands.flywheel;
 
 public class ShotSelecter {
 
-  private static final ShotRecipe[] shotRecipes = {
-    new ShotRecipe(1600, .8, 3.35),
-    new ShotRecipe(1700, .8, 4.15),
-    new ShotRecipe(1780, .8, 4.86),
-    new ShotRecipe(1900, .8, 5.55),
-    new ShotRecipe(2060, .8, 6.36),
+  // private static final ShotRecipe[] shotRecipes = {
+  //   new ShotRecipe(1550, .6, 2.80),
+  //   new ShotRecipe(1650, .6, 3.85),
+  //   new ShotRecipe(1780, .6, 4.87),
+  //   new ShotRecipe(1850, .3, 5.55),
+  //   new ShotRecipe(2050, .1, 6.53),
+  // };
+
+    private static final ShotRecipe[] shotRecipes = {
+    new ShotRecipe(1550, .6, 2.80),
+    //new ShotRecipe(, .6,3.03),
+    new ShotRecipe(1650, .6, 3.85),
+    new ShotRecipe(1780, .6, 4.87),
+    new ShotRecipe(1850, .3, 5.55),
+    new ShotRecipe(2050, .1, 6.53),
   };
 
   private static double interpolatedRPM = 1650;
@@ -36,7 +45,7 @@ public class ShotSelecter {
     if (distance > 0) {
       interpolatedRPM =
           Math.round(
-                  Math.max(19.6645 * distance * distance + (-39.8713) * distance + 1516.54, 1600)
+                  Math.max(16.5033 * distance * distance + (-22.7286) * distance + 1487.78, 1600)
                       / 10.0)
               * 10;
     }

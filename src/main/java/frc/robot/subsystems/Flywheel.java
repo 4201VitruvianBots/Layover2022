@@ -20,6 +20,7 @@ import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.Conversions;
@@ -27,6 +28,7 @@ import java.io.File;
 
 /** Creates a new Flywheel. */
 public class Flywheel extends SubsystemBase {
+  
 
   private final TalonFX[] flywheelMotors = {
     new TalonFX(Constants.Flywheel.flywheelMotorA), new TalonFX(Constants.Flywheel.flywheelMotorB)
@@ -85,6 +87,7 @@ public class Flywheel extends SubsystemBase {
       new LinearSystemLoop<>(m_flywheelPlant, m_controller, m_observer, 10.0, 0.020);
 
   public Flywheel(Vision vision, Turret turret) {
+    SmartDashboard.putNumber( "TarmacShot", tarmacShot);
     m_vision = vision;
     m_turret = turret;
     // Setup shooter motors (Falcons)
@@ -220,6 +223,7 @@ public class Flywheel extends SubsystemBase {
   }
 
   private void updateShuffleboard() {
+    tarmacShot = SmartDashboard.getNumber("TarmacShot", tarmacShot);
     SmartDashboard.putNumber("RPMPrimary", getRPM(0));
     // SmartDashboard.putNumber("RPMSetpoint (Raw)", flywheelSetpointRPM);
     // SmartDashboard.putNumber("RPMSetpoint (Adjusted)", flywheelSetpointRPM - 120);

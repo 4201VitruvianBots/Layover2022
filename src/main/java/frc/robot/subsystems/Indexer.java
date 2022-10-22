@@ -15,6 +15,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -57,6 +58,7 @@ public class Indexer extends SubsystemBase {
 
   /** Creates a new Indexer. */
   public Indexer() {
+    SmartDashboard.putNumber("kickerSetpoint", kickerSetpoint);
     // Motor and PID controller setup
     indexerMotor.configFactoryDefault();
     indexerMotor.setInverted(false);
@@ -122,9 +124,15 @@ public class Indexer extends SubsystemBase {
       setKickerPower(0);
     }
   }
+  private void updateShuffleboard() {
+    kickerSetpoint = SmartDashboard.getNumber("Kicker", kickerSetpoint);
+
+  }
 
   @Override
   public void periodic() {
+
+    
     updateSetpoint();
     SmartDashboardTab.putNumber(
         "Indexer",

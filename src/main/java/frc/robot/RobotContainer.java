@@ -14,12 +14,14 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.Vision.CAMERA_POSITION;
 import frc.robot.commands.SetSwerveDrive;
 import frc.robot.commands.auto.DriveForward;
 import frc.robot.commands.auto.ThreeBallAuto;
 import frc.robot.commands.climber.SetClimbState;
 import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.flywheel.SetRpmSetpoint;
+import frc.robot.commands.flywheel.ShotSelecter;
 import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.indexer.RunOnlyIndexer;
 import frc.robot.commands.intake.ReverseIntakeIndexer;
@@ -131,13 +133,13 @@ public class RobotContainer {
     xBoxButtons[0].whileHeld(new SetRpmSetpoint(m_flywheel, m_vision, () -> m_flywheel.tarmacShot));
     xBoxButtons[1].whileHeld(
         new SetRpmSetpoint(m_flywheel, m_vision, () -> m_flywheel.launchpadShot));
-    // xBoxButtons[3].whileHeld(
-    //     new SetRpmSetpoint(
-    //         m_flywheel,
-    //         m_vision,
-    //         () ->
-    //             ShotSelecter.bestShot(
-    //                 m_vision.getGoalTargetHorizontalDistance(CAMERA_POSITION.LIMELIGHT))));
+    xBoxButtons[3].whileHeld(
+        new SetRpmSetpoint(
+            m_flywheel,
+            m_vision,
+            () ->
+                ShotSelecter.bestShot(
+                    m_vision.getGoalTargetHorizontalDistance(CAMERA_POSITION.LIMELIGHT))));
 
     xBoxButtons[6].whenPressed(new ToggleTurretControlMode(m_turret));
 
