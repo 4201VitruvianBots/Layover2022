@@ -7,6 +7,7 @@ package frc.robot.simulation;
 import static frc.robot.Constants.SwerveDrive.kModuleTranslations;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -59,10 +60,36 @@ public class FieldSim {
     m_field2d
         .getObject("Swerve Modules")
         .setPoses(ModuleMap.orderedValues(m_swerveModulePoses, new Pose2d[0]));
+    try {
+      int[] pruneIds = {0, 1, 2, 3, 4};
+      for (int i = 0; i < m_vision.getCameraRobotPoseIDs().length; i++) {
+        var translation = m_vision.getCameraRobotPoses()[i].getTranslation();
+        translation.rotateBy(new Rotation2d(90));
 
-    for (int i = 0; i < m_vision.getCameraRobotPoseIDs().length; i++) {
-      m_field2d.getObject("Pose " + m_vision.getCameraRobotPoseIDs()[i]).setPose(
-              m_vision.getCameraRobotPoses()[i]);
+        m_field2d.getObject("Pose " + m_vision.getCameraRobotPoseIDs()[i]).setPose(
+                new Pose2d(translation, new Rotation2d()));
+        pruneIds[m_vision.getCameraRobotPoseIDs()[i]] = 0;
+      }
+      for (int i = 0; i < pruneIds.length; i++) {
+        m_field2d.getObject("Pose " + pruneIds[i]).setPose(new Pose2d(-1, -1, new Rotation2d()));
+      }
+
+      pruneIds = new int[]{0, 1, 2, 3, 4};
+      for (int i = 0; i < m_vision.getPnpCameraRobotPoseIDs().length; i++) {
+        var translation = m_vision.getPnpCameraRobotPoses()[i].getTranslation();
+        translation.rotateBy(new Rotation2d(90));
+
+        m_field2d.getObject("PNP Pose " + m_vision.getPnpCameraRobotPoseIDs()[i]).setPose(
+                new Pose2d(translation, new Rotation2d()));
+        pruneIds[m_vision.getPnpCameraRobotPoseIDs()[i]] = 0;
+      }
+      for (int i = 0; i < pruneIds.length; i++) {
+        m_field2d.getObject("PNP Pose " + pruneIds[i]).setPose(new Pose2d(-1, -1, new Rotation2d()));
+      }
+
+      m_field2d.getObject("Avg Pose").setPose(m_vision.getAvgPose());
+    } catch (Exception e) {
+
     }
   }
 

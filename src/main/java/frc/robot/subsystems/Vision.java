@@ -20,6 +20,7 @@ import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardTab;
@@ -74,6 +75,14 @@ public class Vision extends SubsystemBase {
   double[] yPoses = new double[50];
   double[] zPoses = new double[50];
 
+  int[] pnpTagId = new int[50];
+  double[] pnpXPoses = new double[50];
+  double[] pnpyPoses = new double[50];
+
+  double avgXPose = 0;
+  double avgYPose = 0;
+  double headingPose = 0;
+
   MedianFilter limelightYFilter = new MedianFilter(5);
   LinearFilter cargoXFilter = LinearFilter.movingAverage(5);
   LinearFilter cargoYFilter = LinearFilter.movingAverage(5);
@@ -108,13 +117,15 @@ public class Vision extends SubsystemBase {
     }
     limelight = NetworkTableInstance.getDefault().getTable("limelight");
     intake_camera = NetworkTableInstance.getDefault().getTable("OAK-1_Intake");
-    UsbCamera usbCamera = new UsbCamera("Microsoft LifeCam HD-3000", 0);
-    usbCamera.setFPS(15);
-    // usbCamera.setExposureManual(10);
-    usbCamera.setPixelFormat(PixelFormat.kYUYV);
-    usbCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    usbCamera.setResolution(160, 120);
-    CameraServer.startAutomaticCapture(usbCamera);
+    if (RobotBase.isReal()) {
+      UsbCamera usbCamera = new UsbCamera("Microsoft LifeCam HD-3000", 0);
+      usbCamera.setFPS(15);
+      // usbCamera.setExposureManual(10);
+      usbCamera.setPixelFormat(PixelFormat.kYUYV);
+      usbCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+      usbCamera.setResolution(160, 120);
+      CameraServer.startAutomaticCapture(usbCamera);
+    }
 
     PortForwarder.add(5800, Constants.Vision.LIMELIGHT_IP, 5800);
     PortForwarder.add(5801, Constants.Vision.LIMELIGHT_IP, 5801);
@@ -536,6 +547,14 @@ public class Vision extends SubsystemBase {
     xPoses = goal_camera.getEntry("X Poses").getDoubleArray(defaultEntry);
     yPoses = goal_camera.getEntry("Y Poses").getDoubleArray(defaultEntry);
     zPoses = goal_camera.getEntry("Z Poses").getDoubleArray(defaultEntry);
+
+    avgXPose = goal_camera.getEntry("Avg X Pose").getDouble(0);
+    avgYPose = goal_camera.getEntry("Avg Y Pose").getDouble(0);
+    headingPose = goal_camera.getEntry("Heading Pose").getDouble(0);
+
+    pnpTagId = Arrays.stream(goal_camera.getEntry("PnP Pose ID").getDoubleArray(defaultEntry)).mapToInt(i -> (int)i).toArray();
+    pnpXPoses = goal_camera.getEntry("PnP X Poses").getDoubleArray(defaultEntry);
+    pnpyPoses = goal_camera.getEntry("PnP Y Poses").getDoubleArray(defaultEntry);
   }
 
   public int[] getCameraRobotPoseIDs(){
@@ -543,12 +562,28 @@ public class Vision extends SubsystemBase {
   }
 
   public Pose2d[] getCameraRobotPoses(){
-    Pose2d[] poses = new Pose2d[xPoses.length];
+    Pose2d[] poses = new Pose2d[tagId.length];
     for(int i =0; i < xPoses.length; i++){
       poses[i] = new Pose2d(xPoses[i], yPoses[i], new Rotation2d());
     }
 
     return poses;
+  }
+
+  public int[] getPnpCameraRobotPoseIDs(){
+    return pnpTagId;
+  }
+
+  public Pose2d[] getPnpCameraRobotPoses(){
+    Pose2d[] poses = new Pose2d[pnpTagId.length];
+    for(int i =0; i < pnpXPoses.length; i++){
+      poses[i] = new Pose2d(pnpXPoses[i], pnpyPoses[i], new Rotation2d());
+    }
+
+    return poses;
+  }
+  public Pose2d getAvgPose(){
+    return new Pose2d(avgXPose, avgYPose, new Rotation2d(-headingPose));
   }
 
   /** Give the turret a feedforward value if the robot is moving. Based on 254's 2019 code */

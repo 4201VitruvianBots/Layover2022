@@ -9,6 +9,103 @@
     },
     "windows": {
       "/SmartDashboard/Field2d": {
+        "Avg Pose": {
+          "arrowColor": [
+            0.0,
+            232.49998474121094,
+            255.0,
+            255.0
+          ],
+          "color": [
+            0.0,
+            255.0,
+            239.99998474121094,
+            255.0
+          ]
+        },
+        "PNP Pose 1": {
+          "arrowColor": [
+            0.3347240686416626,
+            0.17993079125881195,
+            0.7647058963775635,
+            255.0
+          ],
+          "style": "Line"
+        },
+        "PNP Pose 2": {
+          "arrowColor": [
+            0.1937716156244278,
+            0.31372547149658203,
+            0.1937716156244278,
+            255.0
+          ],
+          "style": "Line"
+        },
+        "PNP Pose 3": {
+          "arrowColor": [
+            0.19896191358566284,
+            0.563725471496582,
+            0.19896191358566284,
+            255.0
+          ],
+          "arrowSize": 37,
+          "style": "Line"
+        },
+        "PNP Pose 4": {
+          "arrowColor": [
+            0.19343522191047668,
+            0.701600968837738,
+            0.7892156839370728,
+            255.0
+          ],
+          "style": "Line"
+        },
+        "Pose 0": {
+          "arrows": false,
+          "color": [
+            0.0,
+            0.0,
+            0.0,
+            255.0
+          ],
+          "style": "Box/Image"
+        },
+        "Pose 1": {
+          "arrows": false,
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            255.0
+          ]
+        },
+        "Pose 2": {
+          "arrows": false,
+          "color": [
+            0.0,
+            0.41176486015319824,
+            1.0,
+            255.0
+          ]
+        },
+        "Pose 3": {
+          "arrows": false,
+          "color": [
+            0.0,
+            1.0,
+            0.3235292434692383,
+            255.0
+          ]
+        },
+        "Pose 4": {
+          "arrows": false,
+          "color": [
+            0.970588207244873,
+            0.0,
+            1.0,
+            255.0
+          ]
+        },
         "Robot": {
           "image": "resources/images/robot.png",
           "length": 0.7620000243186951,
@@ -19,7 +116,8 @@
           "length": 0.4000000059604645,
           "width": 0.4000000059604645
         },
-        "image": "resources/images/field22.png",
+        "height": 2.8956000804901123,
+        "width": 3.251206398010254,
         "window": {
           "visible": true
         }
@@ -28,6 +126,14 @@
   },
   "NetworkTables": {
     "DepthAI": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "Field2d": {
+        "open": true
+      }
+    },
+    "Vision": {
       "open": true
     }
   }
