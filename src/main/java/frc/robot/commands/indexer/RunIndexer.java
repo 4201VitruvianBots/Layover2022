@@ -30,7 +30,7 @@ public class RunIndexer extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_runKicker) m_indexer.setKickerPercentOutput(0.8);
+    if (m_runKicker) m_indexer.setKickerPercentOutput(.6); // .3 .6 .1
 
     m_indexer.setIndexerPercentOutput(-0.65);
   }
