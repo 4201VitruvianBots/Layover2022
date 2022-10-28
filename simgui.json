@@ -129,10 +129,21 @@
     "DepthAI": {
       "open": true
     },
+    "Shuffleboard": {
+      ".metadata": {
+        "Controls": {
+          "alliance_string": {
+            "open": true
+          },
+          "open": true
+        }
+      }
+    },
     "SmartDashboard": {
       "Field2d": {
         "open": true
-      }
+      },
+      "open": true
     }
   }
 }
