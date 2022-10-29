@@ -66,9 +66,10 @@ public class ThreeBallAuto extends SequentialCommandGroup {
         new InstantCommand(() -> swerveDrive.setOdometry(trajectory1.getInitialPose())),
         // new SetOdometry(driveTrain, fieldSim, trajectory1.getInitialPose()), (probably don't )
         new IntakePiston(intake, true),
+        //Intake 1 and shoot
         new ParallelCommandGroup(
             new SetTurretAbsoluteSetpointDegrees(turret, -5), new WaitCommand(.5)),
-        new SetAndHoldRpmSetpoint(flywheel, vision, 2400),
+        new SetAndHoldRpmSetpoint(flywheel, vision, 1650),
         new ParallelDeadlineGroup(
             command1.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
             new AutoRunIntake(intake, indexer)),
@@ -76,9 +77,11 @@ public class ThreeBallAuto extends SequentialCommandGroup {
         new AutoUseVisionCorrection(turret, vision).withTimeout(1),
         new ConditionalCommand(new WaitCommand(0), new WaitCommand(0.5), flywheel::canShoot),
         new AutoRunIndexer(indexer, flywheel).withTimeout(1),
-        new SetAndHoldRpmSetpoint(flywheel, vision, 2400),
-        command2.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
+        new SetAndHoldRpmSetpoint(flywheel, vision, 1650),
+        
+        //Intake 1 and shoot
         new ParallelDeadlineGroup(
+            command2.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
             new AutoRunIntake(intake, indexer), new SetTurretAbsoluteSetpointDegrees(turret, 60)),
         new AutoRunIntake(intake, indexer).withTimeout(1),
         new IntakePiston(intake, false),

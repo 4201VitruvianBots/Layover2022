@@ -16,7 +16,7 @@ public class AutoRunIndexer extends CommandBase {
   private final double m_kickerOutput;
   /** Creates a new RunIndexer. */
   public AutoRunIndexer(Indexer indexer, Flywheel flywheel) {
-    this(indexer, flywheel, 0.85);
+    this(indexer, flywheel, 0.6);
   }
 
   public AutoRunIndexer(Indexer indexer, Flywheel flywheel, double kickerOutput) {
