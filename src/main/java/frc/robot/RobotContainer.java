@@ -17,7 +17,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.Vision.CAMERA_POSITION;
 import frc.robot.commands.SetSwerveDrive;
 import frc.robot.commands.auto.DriveForward;
-import frc.robot.commands.auto.ThreeBallAuto;
+import frc.robot.commands.auto.FiveBallAuto;
+import frc.robot.commands.auto.ThreeBallAutoStart2;
 import frc.robot.commands.climber.SetClimbState;
 import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.flywheel.SetRpmSetpoint;
@@ -149,24 +150,26 @@ public class RobotContainer {
     xBoxPOVButtons[0].whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, false));
     xBoxLeftTrigger.whileHeld(new RunIntake(m_intake, m_indexer));
     xBoxLeftTrigger.whileHeld(new RunOnlyIndexer(m_indexer));
-    // xBoxButtons[9].whenPressed(
-    //     new SetTurretAbsoluteSetpointDegrees(m_turret, 0)
-    //         .andThen(new SetTurretControlMode(m_turret, false)));
-    // Climber
-    xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake));
-    xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true));
-  }
-
+    // xBoxButtons[9].whenPressed( 
+    //     new SetTurretAbsoluteSetpointDegrees(m_turret, 0) 
+    //         .andThen(new SetTurretControlMode(m_turret, false))); 
+    // Climber 
+    xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake)); 
+    xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true)); 
+  } 
+ 
   private void initializeAutoChooser() {
-    m_autoChooser.setDefaultOption("Do Nothing", new WaitCommand(0));
-    m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive));
-    m_autoChooser.addOption(
-        "Three Ball Auto",
-        new ThreeBallAuto(
-            m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
-
-    SmartDashboard.putData("Auto Selector", m_autoChooser);
-  }
+    // m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive)); 
+    m_autoChooser.addOption( 
+    //     "Three Ball Auto Start 2", 
+    //     new ThreeBallAutoStart2( 
+    //         m_swerveDrive, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
+            "Five ball", 
+        new FiveBallAuto( 
+            m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));  
+ 
+    SmartDashboard.putData("Auto Selector", m_autoChooser); 
+  } 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
