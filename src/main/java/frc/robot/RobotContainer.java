@@ -18,7 +18,7 @@ import frc.robot.Constants.Vision.CAMERA_POSITION;
 import frc.robot.commands.SetSwerveDrive;
 import frc.robot.commands.auto.DriveForward;
 import frc.robot.commands.auto.FiveBallAuto;
-import frc.robot.commands.auto.ThreeBallAutoStart2;
+import frc.robot.commands.auto.ThreeBallAutoStart;
 import frc.robot.commands.climber.SetClimbState;
 import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.flywheel.SetRpmSetpoint;
@@ -160,10 +160,11 @@ public class RobotContainer {
  
   private void initializeAutoChooser() {
     // m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive)); 
+    m_autoChooser.addOption(
+    "Three Ball Start", 
+    new ThreeBallAutoStart( 
+        m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));  
     m_autoChooser.addOption( 
-    //     "Three Ball Auto Start 2", 
-    //     new ThreeBallAutoStart2( 
-    //         m_swerveDrive, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
             "Five ball", 
         new FiveBallAuto( 
             m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));  
