@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.Vision.CAMERA_POSITION;
 import frc.robot.commands.SetSwerveDrive;
+import frc.robot.commands.auto.DoNothing;
 import frc.robot.commands.auto.DriveForward;
 import frc.robot.commands.auto.FiveBallAuto;
 import frc.robot.commands.auto.ThreeBallAutoStart;
@@ -159,11 +160,19 @@ public class RobotContainer {
   } 
  
   private void initializeAutoChooser() {
-    // m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive)); 
     m_autoChooser.addOption(
-    "Three Ball Start", 
-    new ThreeBallAutoStart( 
+            "Do Nothing", 
+        new DoNothing(m_swerveDrive));  
+
+    m_autoChooser.addOption(
+            "Drive Forward", 
+        new DriveForward(m_swerveDrive)); 
+    
+    m_autoChooser.addOption(
+            "Three Ball Start", 
+        new ThreeBallAutoStart( 
         m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));  
+
     m_autoChooser.addOption( 
             "Five ball", 
         new FiveBallAuto( 
