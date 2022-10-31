@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -19,7 +18,8 @@ import frc.robot.commands.SetSwerveDrive;
 import frc.robot.commands.auto.DoNothing;
 import frc.robot.commands.auto.DriveForward;
 import frc.robot.commands.auto.FiveBallAuto;
-import frc.robot.commands.auto.ThreeBallAutoStart;
+import frc.robot.commands.auto.TestAuto;
+// import frc.robot.commands.auto.ThreeBallAutoStart;
 import frc.robot.commands.climber.SetClimbState;
 import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.flywheel.SetRpmSetpoint;
@@ -151,35 +151,32 @@ public class RobotContainer {
     xBoxPOVButtons[0].whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, false));
     xBoxLeftTrigger.whileHeld(new RunIntake(m_intake, m_indexer));
     xBoxLeftTrigger.whileHeld(new RunOnlyIndexer(m_indexer));
-    // xBoxButtons[9].whenPressed( 
-    //     new SetTurretAbsoluteSetpointDegrees(m_turret, 0) 
-    //         .andThen(new SetTurretControlMode(m_turret, false))); 
-    // Climber 
-    xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake)); 
-    xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true)); 
-  } 
- 
+    // xBoxButtons[9].whenPressed(
+    //     new SetTurretAbsoluteSetpointDegrees(m_turret, 0)
+    //         .andThen(new SetTurretControlMode(m_turret, false)));
+    // Climber
+    xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake));
+    xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true));
+  }
+
   private void initializeAutoChooser() {
-    m_autoChooser.addOption(
-            "Do Nothing", 
-        new DoNothing(m_swerveDrive));  
+    m_autoChooser.addOption("Do Nothing", new DoNothing(m_swerveDrive));
+
+    m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive));
+
+    m_autoChooser.addOption("TurnTurret", new TestAuto(m_swerveDrive, m_indexer, m_flywheel));
+    // // m_autoChooser.addOption(
+    // //     "Three Ball Start",
+    // //     new ThreeBallAutoStart(
+    // //         m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
 
     m_autoChooser.addOption(
-            "Drive Forward", 
-        new DriveForward(m_swerveDrive)); 
-    
-    m_autoChooser.addOption(
-            "Three Ball Start", 
-        new ThreeBallAutoStart( 
-        m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));  
+        "Five ball",
+        new FiveBallAuto(
+            m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
 
-    m_autoChooser.addOption( 
-            "Five ball", 
-        new FiveBallAuto( 
-            m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));  
- 
-    SmartDashboard.putData("Auto Selector", m_autoChooser); 
-  } 
+    SmartDashboard.putData("Auto Selector", m_autoChooser);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
