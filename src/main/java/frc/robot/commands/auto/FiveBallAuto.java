@@ -41,13 +41,13 @@ public class FiveBallAuto extends SequentialCommandGroup {
         PathPlanner.loadPath("FiveBallAuto-1", Units.feetToMeters(16), Units.feetToMeters(8), false);
 
     PathPlannerTrajectory trajectory2 =
-        PathPlanner.loadPath("FiveBallAuto-2", Units.feetToMeters(16), Units.feetToMeters(8), false);
+        PathPlanner.loadPath("FiveBallAuto-2", Units.feetToMeters(18), Units.feetToMeters(11), false);
 
     PathPlannerTrajectory trajectory3 =
-        PathPlanner.loadPath("FiveBallAuto-3", Units.feetToMeters(16), Units.feetToMeters(8), false);
+        PathPlanner.loadPath("FiveBallAuto-3", Units.feetToMeters(18), Units.feetToMeters(11), false);
 
     PathPlannerTrajectory trajectory4 =
-        PathPlanner.loadPath("FiveBallAuto-4", Units.feetToMeters(13), Units.feetToMeters(7), false);
+        PathPlanner.loadPath("FiveBallAuto-4", Units.feetToMeters(18), Units.feetToMeters(11), false);
 
     PPSwerveControllerCommand command1 =
         new PPSwerveControllerCommand(
@@ -112,7 +112,7 @@ public class FiveBallAuto extends SequentialCommandGroup {
         // // Shoot 2
 
         new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
-        new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(0.9),
+        new AutoRunIndexer(indexer, flywheel, 0.55).withTimeout(0.9),
 
         // // Path 2 + intake 1 cargo
         new IntakePiston(intake, true),
@@ -129,14 +129,13 @@ public class FiveBallAuto extends SequentialCommandGroup {
 
         // Shoot 1
                     // need this (SetTurret command) here?
-        new SetTurretAbsoluteSetpointDegrees(turret, 8),
+        new SetTurretAbsoluteSetpointDegrees(turret, 5),
         new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
-        new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(1),
+        new AutoRunIndexer(indexer, flywheel, 0.55).withTimeout(1),
 
         // Path 3 + run intake + wait for human player (collect 2 cargo) --> already getting
         // general range of hub
         new SetAndHoldRpmSetpoint(flywheel, vision, 1700),
-        // new SetTurretAbsoluteSetpointDegrees(turret, 30).withTimeout(0.25),
         new IntakePiston(intake, true),
         new AutoRunIntakeInstant(intake, indexer, true),
         new ParallelDeadlineGroup(command3.andThen(() -> swerveDrive.drive(0, 0, 0, false, false))),
@@ -147,10 +146,13 @@ public class FiveBallAuto extends SequentialCommandGroup {
 
         // // Path 4 + shoot 2
         new ParallelDeadlineGroup(command4.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)), new SetAndHoldRpmSetpoint(flywheel, vision, 1850)),
+        new SetTurretAbsoluteSetpointDegrees(turret, -3.5).withTimeout(0.25),
         new IntakePiston(intake, false),
         new AutoUseVisionCorrection(turret, vision).withTimeout(0.75),
         new ParallelDeadlineGroup(
-            new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(5.0),
-            new AutoRunIntakeOnly(intake)));
+            new AutoRunIndexer(indexer, flywheel, 0.4).withTimeout(5.0),
+            new AutoRunIntakeOnly(intake)),
+        new SetAndHoldRpmSetpoint(flywheel, vision, 0));
+
   }
 }
