@@ -117,7 +117,38 @@ public final class Constants {
     // public static final int intakeSensor = 0;
   }
 
+<<<<<<< Updated upstream
   public final class Flywheel {
+=======
+  public static class Flywheel {
+    private static final Point2D[] kRPMPoints = new Point2D.Double[] {
+      // (ty-angle,distance)
+      new Point2D.Double(35, 1500),
+      new Point2D.Double(55, 1860),
+      new Point2D.Double(80, 2000), //
+      new Point2D.Double(105, 2100), //
+      new Point2D.Double(130, 2170), //
+      new Point2D.Double(155, 2245), //
+      new Point2D.Double(180, 2460), //
+      new Point2D.Double(205, 2670), //
+      new Point2D.Double(230, 2840), //
+      new Point2D.Double(255, 2980), //
+      new Point2D.Double(280, 3350)
+
+  };
+    public static final LinearInterpolationTable kRPMTable = new LinearInterpolationTable(kRPMPoints);
+
+    private static final Point2D[] kShotTimes = new Point2D.Double[] {
+        // (ty-angle,time)
+        new Point2D.Double(80, 0.78),
+        new Point2D.Double(130, 0.80),
+        new Point2D.Double(190, 0.81),
+        new Point2D.Double(240, 0.82),
+        new Point2D.Double(280, 0.83)
+    };
+    public static final LinearInterpolationTable kTimeTable = new LinearInterpolationTable(kShotTimes);
+
+>>>>>>> Stashed changes
     public static final int flywheelMotorA = 40;
     public static final int flywheelMotorB = 41;
     public static final double hubToleranceDegrees = 3.0;
