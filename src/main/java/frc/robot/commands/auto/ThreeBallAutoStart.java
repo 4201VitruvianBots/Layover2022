@@ -81,7 +81,7 @@ public class ThreeBallAutoStart extends SequentialCommandGroup {
         // // Shoot 2
         new IntakePiston(intake, true),
         new IntakePiston(intake, false),
-        new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(1.5),
+        new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(2),
 
         // // Path 2 + intake 1 cargo
         new IntakePiston(intake, true),
