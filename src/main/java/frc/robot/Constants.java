@@ -144,6 +144,10 @@ public final class Constants {
     public static final double gearRatio = 1.0;
   }
 
+  public final class LED {
+    public static final int CANdleID = 0;
+  }
+
   public static final class Turret {
     public static final int turretMotor = 60;
 
