@@ -10,14 +10,16 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.Vision.CAMERA_POSITION;
 import frc.robot.commands.SetSwerveDrive;
+import frc.robot.commands.auto.DoNothing;
 import frc.robot.commands.auto.DriveForward;
-import frc.robot.commands.auto.ThreeBallAuto;
+import frc.robot.commands.auto.FiveBallAuto;
+import frc.robot.commands.auto.TestAuto;
+import frc.robot.commands.auto.ThreeBallAutoStart;
 import frc.robot.commands.climber.SetClimbState;
 import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.flywheel.SetRpmSetpoint;
@@ -26,6 +28,7 @@ import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.indexer.RunOnlyIndexer;
 import frc.robot.commands.intake.ReverseIntakeIndexer;
 import frc.robot.commands.intake.RunIntake;
+import frc.robot.commands.swerve.ResetOdometry;
 import frc.robot.commands.turret.SetTurretSetpointFieldAbsolute;
 import frc.robot.commands.turret.ToggleTurretControlMode;
 import frc.robot.commands.turret.ToggleTurretLock;
@@ -155,14 +158,25 @@ public class RobotContainer {
     // Climber
     xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake));
     xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true));
+    
+    SmartDashboard.putData(new ResetOdometry(m_swerveDrive));
   }
 
   private void initializeAutoChooser() {
-    m_autoChooser.setDefaultOption("Do Nothing", new WaitCommand(0));
+    m_autoChooser.addOption("Do Nothing", new DoNothing(m_swerveDrive));
+
     m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive));
+
+    m_autoChooser.addOption("TurnTurret", new TestAuto(m_swerveDrive, m_turret));
+
     m_autoChooser.addOption(
-        "Three Ball Auto",
-        new ThreeBallAuto(
+        "Three Ball Start",
+        new ThreeBallAutoStart(
+            m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
+
+    m_autoChooser.setDefaultOption(
+        "Five ball",
+        new FiveBallAuto(
             m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
 
     SmartDashboard.putData("Auto Selector", m_autoChooser);
@@ -190,6 +204,7 @@ public class RobotContainer {
 
   public void autonomousInit() {
     m_climber.setHoldPosition(m_climber.getElevatorClimbPosition());
+    m_swerveDrive.setNeutralMode(NeutralMode.Brake);
   }
 
   public void autonomousPeriodic() {}

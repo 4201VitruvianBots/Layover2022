@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN;
 import frc.robot.utils.ModuleMap;
@@ -62,7 +63,7 @@ public class SwerveDrive extends SubsystemBase {
                       new CANCoder(CAN.backRightCanCoder),
                       backRightCANCoderOffset)));
 
-  private final Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon);
+  private final Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon, "rio");
 
   private final SwerveDrivePoseEstimator m_odometry =
       new SwerveDrivePoseEstimator(
@@ -134,6 +135,11 @@ public class SwerveDrive extends SubsystemBase {
     return Rotation2d.fromDegrees(getHeadingDegrees());
   }
 
+  public void resetGyro() {
+    m_pigeon.setYaw(0);
+    m_pigeon.setAccumZAngle(0);
+  }
+
   public Pose2d getPoseMeters() {
     return m_odometry.getEstimatedPosition();
   }
@@ -191,7 +197,9 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
-  private void updateSmartDashboard() {}
+  private void updateSmartDashboard() {
+    SmartDashboard.putNumber("Gyro", getHeadingDegrees());
+  }
 
   @Override
   public void periodic() {

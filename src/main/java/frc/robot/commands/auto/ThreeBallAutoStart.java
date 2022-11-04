@@ -1,21 +1,21 @@
 package frc.robot.commands.auto;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.flywheel.SetAndHoldRpmSetpoint;
 import frc.robot.commands.indexer.AutoRunIndexer;
 import frc.robot.commands.intake.AutoRunIntake;
+import frc.robot.commands.intake.AutoRunIntakeIndexer;
+import frc.robot.commands.intake.AutoRunIntakeOnly;
 import frc.robot.commands.intake.IntakePiston;
-import frc.robot.commands.swerve.SetSwerveOdometry;
+import frc.robot.commands.swerve.SetSwerveNeutralMode;
 import frc.robot.commands.turret.AutoUseVisionCorrection;
 import frc.robot.commands.turret.SetTurretAbsoluteSetpointDegrees;
 import frc.robot.simulation.FieldSim;
@@ -26,8 +26,8 @@ import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
-public class ThreeBallAuto extends SequentialCommandGroup {
-  public ThreeBallAuto(
+public class ThreeBallAutoStart extends SequentialCommandGroup {
+  public ThreeBallAutoStart(
       SwerveDrive swerveDrive,
       FieldSim fieldSim,
       Intake intake,
@@ -35,12 +35,15 @@ public class ThreeBallAuto extends SequentialCommandGroup {
       Flywheel flywheel,
       Turret turret,
       Vision vision) {
+
     PathPlannerTrajectory trajectory1 =
         PathPlanner.loadPath(
-            "ThreeBallAuto-1", Units.feetToMeters(2), Units.feetToMeters(2), false);
+            "ThreeBallAutoStart-1", Units.feetToMeters(6), Units.feetToMeters(2), false);
+
     PathPlannerTrajectory trajectory2 =
         PathPlanner.loadPath(
-            "ThreeBallAuto-2", Units.feetToMeters(2), Units.feetToMeters(2), false);
+            "ThreeBallAutoStart-2", Units.feetToMeters(6), Units.feetToMeters(2), false);
+
     PPSwerveControllerCommand command1 =
         new PPSwerveControllerCommand(
             trajectory1,
@@ -51,6 +54,7 @@ public class ThreeBallAuto extends SequentialCommandGroup {
             swerveDrive.getThetaPidController(),
             swerveDrive::setSwerveModuleStatesAuto,
             swerveDrive);
+
     PPSwerveControllerCommand command2 =
         new PPSwerveControllerCommand(
             trajectory2,
@@ -61,41 +65,41 @@ public class ThreeBallAuto extends SequentialCommandGroup {
             swerveDrive.getThetaPidController(),
             swerveDrive::setSwerveModuleStatesAuto,
             swerveDrive);
+
     addCommands(
-        new SetSwerveOdometry(swerveDrive, trajectory1.getInitialPose()),
         new InstantCommand(() -> swerveDrive.setOdometry(trajectory1.getInitialPose())),
-        // new SetOdometry(driveTrain, fieldSim, trajectory1.getInitialPose()), (probably don't )
-        new IntakePiston(intake, true),
-        new ParallelCommandGroup(
-            new SetTurretAbsoluteSetpointDegrees(turret, -5), new WaitCommand(.5)),
-        new SetAndHoldRpmSetpoint(flywheel, vision, 2400),
+        new SetSwerveNeutralMode(swerveDrive, NeutralMode.Brake),
+
+        // Path 1 + intake 1 cargo
+        new IntakePiston(intake, false),
+        new SetAndHoldRpmSetpoint(flywheel, vision, 1650),
         new ParallelDeadlineGroup(
             command1.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
-            new AutoRunIntake(intake, indexer)),
-        new AutoRunIntake(intake, indexer).withTimeout(1),
-        new AutoUseVisionCorrection(turret, vision).withTimeout(1),
-        new ConditionalCommand(new WaitCommand(0), new WaitCommand(0.5), flywheel::canShoot),
-        new AutoRunIndexer(indexer, flywheel).withTimeout(1),
-        new SetAndHoldRpmSetpoint(flywheel, vision, 2400),
-        command2.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
-        new ParallelDeadlineGroup(
-            new AutoRunIntake(intake, indexer), new SetTurretAbsoluteSetpointDegrees(turret, 60)),
-        new AutoRunIntake(intake, indexer).withTimeout(1),
+            new AutoRunIntakeIndexer(intake, indexer),
+            new SetTurretAbsoluteSetpointDegrees(turret, 0)),
+
+        new AutoUseVisionCorrection(turret, vision).withTimeout(0.5),
+        // // Shoot 2
+        new IntakePiston(intake, true),
         new IntakePiston(intake, false),
-        new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
-        new ConditionalCommand(new WaitCommand(0), new WaitCommand(0.5), flywheel::canShoot),
-        new AutoRunIndexer(indexer, flywheel).withTimeout(1),
-        new SetAndHoldRpmSetpoint(flywheel, vision, 0));
+        new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(1.5),
 
-    // stop intake (no intake stuff yet, need to implement)
-    // shoot ball (no shooter stuff yet, need to implement)
-    // run intake (no intake stuff yet, need to implement)
+        // // Path 2 + intake 1 cargo
+        new IntakePiston(intake, true),
+        new SetAndHoldRpmSetpoint(flywheel, vision, 1200),
+        new ParallelDeadlineGroup(
+            // new InterruptingCommand(
+            command2.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
+            // new DriveToCargoTrajectory(driveTrain, vision),
+            // () -> false),
+            new AutoRunIntake(intake, indexer),
+            // need this (SetTurret command) here?
+            new SetTurretAbsoluteSetpointDegrees(turret, 20)),
+        new IntakePiston(intake, false),
 
-    // stop intake (no  intake stuff yet, need to implement)
-    // shoot ball (no shooter stuff yet, need to implement)
-
-    // TODO: Find out what this does
-    // .andThen(() -> swerveDrive.setNeutralMode(NeutralMode.Brake))
-    // .andThen(() -> swerveDrive.drive(0, 0, 0, false, false));
+        // Shoot 1
+        new ParallelDeadlineGroup(
+            new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(5.0),
+            new AutoRunIntakeOnly(intake)));
   }
 }
