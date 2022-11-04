@@ -61,8 +61,8 @@ public class Indexer extends SubsystemBase {
     indexerMotor.configFactoryDefault();
     indexerMotor.setInverted(false);
 
-    indexerMotor.setStatusFramePeriod(1, 100);
-    indexerMotor.setStatusFramePeriod(2, 100);
+    indexerMotor.setStatusFramePeriod(1, 200 );
+    indexerMotor.setStatusFramePeriod(2, 200);
     kickerMotor.configFactoryDefault();
     kickerMotor.setInverted(false);
     kickerMotor.configVoltageCompSaturation(voltageComp);
@@ -70,8 +70,8 @@ public class Indexer extends SubsystemBase {
 
     kickerMotor.setNeutralMode(NeutralMode.Brake);
 
-    kickerMotor.setStatusFramePeriod(1, 100);
-    kickerMotor.setStatusFramePeriod(2, 100);
+    kickerMotor.setStatusFramePeriod(1, 200);
+    kickerMotor.setStatusFramePeriod(2, 200);
 
     // SmartDashboard.putData("indexer Subsystem", this);
 

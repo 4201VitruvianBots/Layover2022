@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.unmanaged.Unmanaged;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -80,8 +81,11 @@ public class SwerveModule extends SubsystemBase {
     m_angleEncoder.configFactoryDefault();
     m_angleEncoder.configAllSettings(CtreUtils.generateCanCoderConfig());
     // m_angleEncoder.configMagnetOffset(m_angleOffset);
+        m_angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 200);
+        m_angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 200); 
 
     resetAngleToAbsolute();
+
   }
 
   public ModulePosition getModulePosition() {
@@ -154,10 +158,10 @@ public class SwerveModule extends SubsystemBase {
   }
 
   private void updateSmartDashboard() {
-    SmartDashboard.putNumber(
-        "module " + m_moduleNumber + " heading", getState().angle.getDegrees());
-    SmartDashboard.putNumber(
-        "module " + m_moduleNumber + " CANCoder reading", m_angleEncoder.getAbsolutePosition());
+    // SmartDashboard.putNumber(
+    //     "module " + m_moduleNumber + " heading", getState().angle.getDegrees());
+    // SmartDashboard.putNumber(
+    //     "module " + m_moduleNumber + " CANCoder reading", m_angleEncoder.getAbsolutePosition());
   }
 
   @Override

@@ -34,8 +34,8 @@ public class Intake extends SubsystemBase {
     intakeMotor.configFactoryDefault();
     intakeMotor.setNeutralMode(NeutralMode.Coast);
     intakeMotor.configOpenloopRamp(0.5);
-    intakeMotor.setStatusFramePeriod(1, 100);
-    intakeMotor.setStatusFramePeriod(2, 100);
+    intakeMotor.setStatusFramePeriod(1, 200);
+    intakeMotor.setStatusFramePeriod(2, 200);
 
     intakeMotor.setInverted(false);
   }
