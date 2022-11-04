@@ -208,7 +208,7 @@ public final class Constants {
     public static final double kD_X = 0;
     public static final double kP_Y = 0.2;
     public static final double kD_Y = 0;
-    public static final double kP_Theta = 8;
+    public static final double kP_Theta = 6.0;
     public static final double kD_Theta = 0;
 
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =

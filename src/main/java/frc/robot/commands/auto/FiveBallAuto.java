@@ -105,16 +105,17 @@ public class FiveBallAuto extends SequentialCommandGroup {
         // new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
         new IntakePiston(intake, true),
         new SetAndHoldRpmSetpoint(flywheel, vision, 1590),
+        new SetTurretAbsoluteSetpointDegrees(turret, 7), // was 5
         new ParallelDeadlineGroup(
             // new InterruptingCommand(
             command1.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
             // new DriveToCargoTrajectory(swerveDrive, vision),
             // () -> false),
-            new AutoRunIntakeIndexer(intake, indexer),
-            new SetTurretAbsoluteSetpointDegrees(turret, 5)),
+            new AutoRunIntakeIndexer(intake, indexer)),
+        new AutoUseVisionCorrection(turret, vision).withTimeout(0.5),
         new IntakePiston(intake, false),
 
-        // // Shoot 2
+        // // Shoot 3
 
         // new AutoUseVisionCorrection(turret, vision).withTimeout(0.25),
         new AutoRunIndexer(indexer, flywheel, 0.5).withTimeout(1.5),
@@ -155,6 +156,7 @@ public class FiveBallAuto extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new AutoRunIndexer(indexer, flywheel, 0.4).withTimeout(5.0),
             new AutoRunIntakeOnly(intake)),
-        new SetAndHoldRpmSetpoint(flywheel, vision, 0));
+        new SetAndHoldRpmSetpoint(flywheel, vision, 0),
+        new AutoUseVisionCorrection(turret, vision));
   }
 }

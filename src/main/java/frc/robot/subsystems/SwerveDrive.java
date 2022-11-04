@@ -63,7 +63,7 @@ public class SwerveDrive extends SubsystemBase {
                       new CANCoder(CAN.backRightCanCoder),
                       backRightCANCoderOffset)));
 
-  private final Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon);
+  private final Pigeon2 m_pigeon = new Pigeon2(CAN.pigeon, "rio");
 
   private final SwerveDrivePoseEstimator m_odometry =
       new SwerveDrivePoseEstimator(
@@ -133,6 +133,11 @@ public class SwerveDrive extends SubsystemBase {
 
   public Rotation2d getHeadingRotation2d() {
     return Rotation2d.fromDegrees(getHeadingDegrees());
+  }
+
+  public void resetGyro() {
+    m_pigeon.setYaw(0);
+    m_pigeon.setAccumZAngle(0);
   }
 
   public Pose2d getPoseMeters() {

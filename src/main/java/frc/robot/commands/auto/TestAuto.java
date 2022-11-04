@@ -2,16 +2,15 @@ package frc.robot.commands.auto;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.indexer.AutoRunIndexer;
 import frc.robot.commands.swerve.SetSwerveNeutralMode;
-import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.commands.turret.SetTurretAbsoluteSetpointDegrees;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Turret;
 
 public class TestAuto extends SequentialCommandGroup {
-  public TestAuto(SwerveDrive swerveDrive, Indexer indexer, Flywheel flywheel) {
+  public TestAuto(SwerveDrive swerveDrive, Turret turret) {
     addCommands(
         new SetSwerveNeutralMode(swerveDrive, NeutralMode.Brake),
-        new AutoRunIndexer(indexer, flywheel, 0.6));
+        new SetTurretAbsoluteSetpointDegrees(turret, 30));
   }
 }

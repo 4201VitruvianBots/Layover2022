@@ -28,6 +28,7 @@ import frc.robot.commands.indexer.RunIndexer;
 import frc.robot.commands.indexer.RunOnlyIndexer;
 import frc.robot.commands.intake.ReverseIntakeIndexer;
 import frc.robot.commands.intake.RunIntake;
+import frc.robot.commands.swerve.ResetOdometry;
 import frc.robot.commands.turret.SetTurretSetpointFieldAbsolute;
 import frc.robot.commands.turret.ToggleTurretControlMode;
 import frc.robot.commands.turret.ToggleTurretLock;
@@ -157,6 +158,8 @@ public class RobotContainer {
     // Climber
     xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake));
     xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true));
+    
+    SmartDashboard.putData(new ResetOdometry(m_swerveDrive));
   }
 
   private void initializeAutoChooser() {
@@ -164,7 +167,7 @@ public class RobotContainer {
 
     m_autoChooser.addOption("Drive Forward", new DriveForward(m_swerveDrive));
 
-    m_autoChooser.addOption("TurnTurret", new TestAuto(m_swerveDrive, m_indexer, m_flywheel));
+    m_autoChooser.addOption("TurnTurret", new TestAuto(m_swerveDrive, m_turret));
 
     m_autoChooser.addOption(
         "Three Ball Start",
@@ -201,6 +204,7 @@ public class RobotContainer {
 
   public void autonomousInit() {
     m_climber.setHoldPosition(m_climber.getElevatorClimbPosition());
+    m_swerveDrive.setNeutralMode(NeutralMode.Brake);
   }
 
   public void autonomousPeriodic() {}
