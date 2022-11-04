@@ -158,7 +158,7 @@ public class RobotContainer {
     // Climber
     xBoxButtons[9].whenPressed(new SetClimbState(m_climber, true, m_intake));
     xBoxRightTrigger.whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true));
-    
+
     SmartDashboard.putData(new ResetOdometry(m_swerveDrive));
   }
 

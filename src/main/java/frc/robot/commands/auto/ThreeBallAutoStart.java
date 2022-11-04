@@ -77,7 +77,6 @@ public class ThreeBallAutoStart extends SequentialCommandGroup {
             command1.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
             new AutoRunIntakeIndexer(intake, indexer),
             new SetTurretAbsoluteSetpointDegrees(turret, 0)),
-
         new AutoUseVisionCorrection(turret, vision).withTimeout(0.5),
         // // Shoot 2
         new IntakePiston(intake, true),
