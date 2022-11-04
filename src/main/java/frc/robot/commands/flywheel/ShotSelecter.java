@@ -14,13 +14,13 @@ public class ShotSelecter {
   // };
 
   private static final ShotRecipe[] shotRecipes = {
-    new ShotRecipe(1780, .83, 2.726), 
-    // new ShotRecipe(, .6,3.03), 
-    new ShotRecipe(1650, .6, 2.87), 
-    new ShotRecipe(1700, .6, 3.01), 
-    new ShotRecipe(1755, .6, 3.29), 
-    new ShotRecipe(1775, .6, 3.74), 
-    new ShotRecipe(1890, .6, 4.59), 
+    // new ShotRecipe(1780, .83, 2.726),
+    // new ShotRecipe(, .6,3.03),
+    new ShotRecipe(1650, .6, 2.87),
+    new ShotRecipe(1700, .6, 3.01),
+    new ShotRecipe(1755, .6, 3.29),
+    new ShotRecipe(1775, .6, 3.74),
+    new ShotRecipe(1890, .6, 4.59),
   };
 
   private static double interpolatedRPM = 1650;
