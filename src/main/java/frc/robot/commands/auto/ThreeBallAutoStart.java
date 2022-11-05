@@ -71,7 +71,7 @@ public class ThreeBallAutoStart extends SequentialCommandGroup {
         new SetSwerveNeutralMode(swerveDrive, NeutralMode.Brake),
 
         // Path 1 + intake 1 cargo
-        new IntakePiston(intake, false),
+        new IntakePiston(intake, true),
         new SetAndHoldRpmSetpoint(flywheel, vision, 1650),
         new ParallelDeadlineGroup(
             command1.andThen(() -> swerveDrive.drive(0, 0, 0, false, false)),
@@ -79,9 +79,8 @@ public class ThreeBallAutoStart extends SequentialCommandGroup {
             new SetTurretAbsoluteSetpointDegrees(turret, 0)),
         new AutoUseVisionCorrection(turret, vision).withTimeout(0.5),
         // // Shoot 2
-        new IntakePiston(intake, true),
         new IntakePiston(intake, false),
-        new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(2),
+        new AutoRunIndexer(indexer, flywheel, 0.6).withTimeout(4),
 
         // // Path 2 + intake 1 cargo
         new IntakePiston(intake, true),

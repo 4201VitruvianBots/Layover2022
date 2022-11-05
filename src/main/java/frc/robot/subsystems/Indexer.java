@@ -61,7 +61,7 @@ public class Indexer extends SubsystemBase {
     indexerMotor.configFactoryDefault();
     indexerMotor.setInverted(false);
 
-    indexerMotor.setStatusFramePeriod(1, 200 );
+    indexerMotor.setStatusFramePeriod(1, 200);
     indexerMotor.setStatusFramePeriod(2, 200);
     kickerMotor.configFactoryDefault();
     kickerMotor.setInverted(false);

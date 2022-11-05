@@ -36,7 +36,7 @@ public class RunIntake extends CommandBase {
    */
   @Override
   public void execute() {
-    m_intake.setIntakePercentOutput(0.7);
+    m_intake.setIntakePercentOutput(0.55);
     m_indexer.setKickerPercentOutput(-0.1);
   }
 

@@ -51,9 +51,9 @@ public class Flywheel extends SubsystemBase {
   private double kI = 0.0000;
   private double errorSum = 0;
   private double errorRange = 100;
-  public double tarmacShot = 1650;
-  public double launchpadShot = 1780;
-  public double launchpadShot2 = 1875;
+  public double tarmacShot = 1800;
+  public double launchpadShot = 2250;
+  // public double launchpadShot2 = 2300;
 
   private final LinearSystem<N1, N1, N1> m_flywheelPlant =
       LinearSystemId.identifyVelocitySystem(
@@ -85,6 +85,7 @@ public class Flywheel extends SubsystemBase {
       new LinearSystemLoop<>(m_flywheelPlant, m_controller, m_observer, 10.0, 0.020);
 
   public Flywheel(Vision vision, Turret turret) {
+    SmartDashboard.putNumber("TarmacShot", tarmacShot);
     m_vision = vision;
     m_turret = turret;
     // Setup shooter motors (Falcons)
@@ -220,6 +221,7 @@ public class Flywheel extends SubsystemBase {
   }
 
   private void updateShuffleboard() {
+    tarmacShot = SmartDashboard.getNumber("TarmacShot", tarmacShot);
     SmartDashboard.putNumber("RPMPrimary", getRPM(0));
     // SmartDashboard.putNumber("RPMSetpoint (Raw)", flywheelSetpointRPM);
     // SmartDashboard.putNumber("RPMSetpoint (Adjusted)", flywheelSetpointRPM - 120);
@@ -275,4 +277,6 @@ public class Flywheel extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  public void run(double rpm) {}
 }

@@ -22,7 +22,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveDrive.ModulePosition;
@@ -81,11 +80,10 @@ public class SwerveModule extends SubsystemBase {
     m_angleEncoder.configFactoryDefault();
     m_angleEncoder.configAllSettings(CtreUtils.generateCanCoderConfig());
     // m_angleEncoder.configMagnetOffset(m_angleOffset);
-        m_angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 200);
-        m_angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 200); 
+    m_angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 200);
+    m_angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 200);
 
     resetAngleToAbsolute();
-
   }
 
   public ModulePosition getModulePosition() {
