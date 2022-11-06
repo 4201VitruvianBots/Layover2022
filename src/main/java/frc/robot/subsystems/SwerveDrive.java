@@ -197,14 +197,14 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
-  private void updateSmartDashboard() {
+  public void updateSmartDashboard() {
     SmartDashboard.putNumber("Gyro", getHeadingDegrees());
   }
 
   @Override
   public void periodic() {
     updateOdometry();
-    updateSmartDashboard();
+    // updateSmartDashboard();
   }
 
   @Override

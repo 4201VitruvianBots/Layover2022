@@ -57,8 +57,8 @@ public class Climber extends SubsystemBase {
     elevatorClimbMotors[0].config_kF(0, kF);
     elevatorClimbMotors[0].config_kP(0, kP);
 
-    elevatorClimbMotors[0].setStatusFramePeriod(1, 200);
-    elevatorClimbMotors[0].setStatusFramePeriod(2, 200);
+    elevatorClimbMotors[0].setStatusFramePeriod(1, 255);
+    elevatorClimbMotors[0].setStatusFramePeriod(2, 255);
 
     elevatorClimbMotors[1].setStatusFramePeriod(1, 255);
     elevatorClimbMotors[1].setStatusFramePeriod(1, 255);

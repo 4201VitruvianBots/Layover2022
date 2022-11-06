@@ -41,11 +41,7 @@ public class SetClimbState extends CommandBase {
   }
 
   @Override
-  public void execute() {
-    if (m_climber.getElevatorClimbState() == true) {
-      m_intake.setIntakePiston(true);
-    }
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

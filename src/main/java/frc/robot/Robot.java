@@ -33,6 +33,8 @@ public class Robot extends TimedRobot {
 
     DataLogManager.start();
     LiveWindow.disableAllTelemetry();
+    addPeriodic(()-> m_robotContainer.updateSmartDashboard(), 0.1, 0.01);
+    addPeriodic(() -> m_robotContainer.updateFlywheelSmartDasboard(),0.04,0.01); 
   }
 
   /**

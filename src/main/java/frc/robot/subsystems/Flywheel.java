@@ -52,7 +52,7 @@ public class Flywheel extends SubsystemBase {
   private double errorSum = 0;
   private double errorRange = 100;
   public double tarmacShot = 1800;
-  public double launchpadShot = 2250;
+  public double launchpadShot = 2100;
   // public double launchpadShot2 = 2300;
 
   private final LinearSystem<N1, N1, N1> m_flywheelPlant =
@@ -220,7 +220,7 @@ public class Flywheel extends SubsystemBase {
     flywheelSetpointRPM = idealRPM;
   }
 
-  private void updateShuffleboard() {
+  public void updateShuffleboard() {
     tarmacShot = SmartDashboard.getNumber("TarmacShot", tarmacShot);
     SmartDashboard.putNumber("RPMPrimary", getRPM(0));
     // SmartDashboard.putNumber("RPMSetpoint (Raw)", flywheelSetpointRPM);
@@ -270,7 +270,7 @@ public class Flywheel extends SubsystemBase {
     // This method will be called once per scheduler run
     updateRPMSetpoint();
     updateCanShoot();
-    updateShuffleboard();
+    // updateShuffleboard();
   }
 
   @Override

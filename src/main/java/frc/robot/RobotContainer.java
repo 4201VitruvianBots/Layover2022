@@ -215,6 +215,14 @@ public class RobotContainer {
     m_climber.setHoldPosition(m_climber.getElevatorClimbPosition());
   }
 
+  public void updateSmartDashboard(){
+    m_swerveDrive.updateSmartDashboard(); 
+    m_turret.updateShuffleboard(); 
+  }
+
+  public void updateFlywheelSmartDasboard(){
+    m_flywheel.updateShuffleboard(); 
+  }
   public void teleopPeriodic() {}
 
   public void simulationInit() {}

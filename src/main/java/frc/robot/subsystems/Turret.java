@@ -212,7 +212,7 @@ public class Turret extends SubsystemBase {
     turretMotor.setNeutralMode(mode);
   }
 
-  private void updateShuffleboard() {
+  public void updateShuffleboard() {
     if (RobotBase.isReal()) {
       SmartDashboardTab.putNumber("Turret", "Angle", getTurretAngleDegrees());
       SmartDashboardTab.putNumber("Turret", "Setpoint", getTurretSetpointDegrees());
@@ -231,6 +231,6 @@ public class Turret extends SubsystemBase {
     // }
 
     updateClosedLoopPosition();
-    updateShuffleboard();
+    // updateShuffleboard();
   }
 }
