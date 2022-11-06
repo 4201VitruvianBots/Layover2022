@@ -17,7 +17,8 @@ import frc.robot.Constants.Vision.CAMERA_POSITION;
 import frc.robot.commands.SetSwerveDrive;
 import frc.robot.commands.auto.DoNothing;
 import frc.robot.commands.auto.DriveForward;
-import frc.robot.commands.auto.FiveBallAuto;
+import frc.robot.commands.auto.FiveBallAutoBlue;
+import frc.robot.commands.auto.FiveBallAutoRed;
 import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.auto.ThreeBallAutoStart;
 import frc.robot.commands.climber.SetClimbState;
@@ -133,6 +134,7 @@ public class RobotContainer {
             () -> xBoxController.getLeftTriggerAxis() > 0.1); // getTrigger());// getRawAxis(2));
     xBoxRightTrigger = new Button(() -> xBoxController.getRightTriggerAxis() > 0.1);
 
+    rightButtons[1].whileHeld(new RunIndexer(m_intake, m_indexer, m_flywheel, true));
     xBoxButtons[0].whileHeld(new SetRpmSetpoint(m_flywheel, m_vision, () -> m_flywheel.tarmacShot));
     xBoxButtons[1].whileHeld(
         new SetRpmSetpoint(m_flywheel, m_vision, () -> m_flywheel.launchpadShot));
@@ -175,10 +177,15 @@ public class RobotContainer {
             m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
 
     m_autoChooser.setDefaultOption(
-        "Five ball",
-        new FiveBallAuto(
+        "Five ball Blue",
+        new FiveBallAutoBlue(
             m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
 
+    m_autoChooser.setDefaultOption(
+        "Five ball Red",
+        new FiveBallAutoRed(
+            m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
+      
     SmartDashboard.putData("Auto Selector", m_autoChooser);
   }
 
