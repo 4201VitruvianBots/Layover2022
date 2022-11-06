@@ -11,6 +11,7 @@ import static frc.robot.Constants.SwerveModule.kDriveMotorGearRatio;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
@@ -80,6 +81,10 @@ public class SwerveModule extends SubsystemBase {
     m_angleEncoder.configFactoryDefault();
     m_angleEncoder.configAllSettings(CtreUtils.generateCanCoderConfig());
     // m_angleEncoder.configMagnetOffset(m_angleOffset);
+    m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 50);
+    m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
+    m_turnMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 50);
+    m_turnMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
     m_angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 200);
     m_angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 200);
 

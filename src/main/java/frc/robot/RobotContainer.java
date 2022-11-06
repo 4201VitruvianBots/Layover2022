@@ -185,7 +185,7 @@ public class RobotContainer {
         "Five ball Red",
         new FiveBallAutoRed(
             m_swerveDrive, m_fieldSim, m_intake, m_indexer, m_flywheel, m_turret, m_vision));
-      
+
     SmartDashboard.putData("Auto Selector", m_autoChooser);
   }
 
@@ -222,14 +222,15 @@ public class RobotContainer {
     m_climber.setHoldPosition(m_climber.getElevatorClimbPosition());
   }
 
-  public void updateSmartDashboard(){
-    m_swerveDrive.updateSmartDashboard(); 
-    m_turret.updateShuffleboard(); 
+  public void updateSmartDashboard() {
+    m_swerveDrive.updateSmartDashboard();
+    m_turret.updateShuffleboard();
   }
 
-  public void updateFlywheelSmartDasboard(){
-    m_flywheel.updateShuffleboard(); 
+  public void updateFlywheelSmartDasboard() {
+    m_flywheel.updateShuffleboard();
   }
+
   public void teleopPeriodic() {}
 
   public void simulationInit() {}

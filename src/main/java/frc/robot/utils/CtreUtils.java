@@ -43,7 +43,6 @@ public final class CtreUtils {
     motorConfig.closedloopRamp = 0.1;
 
     motorConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
-
     return motorConfig;
   }
 
