@@ -245,9 +245,10 @@ public class Vision extends SubsystemBase {
       }
     }
 
-    double targetHeightAngle =
-        -Math.atan((minPixel - 120.0) / (240.0 / (2 * Math.tan(Math.toRadians(24.85)))));
-    targetHeightAngle = Math.toDegrees(targetHeightAngle);
+    // double targetHeightAngle =
+    //     -Math.atan((minPixel - 120.0) / (240.0 / (2 * Math.tan(Math.toRadians(24.85)))));
+    // targetHeightAngle = Math.toDegrees(targetHeightAngle);
+    double targetHeightAngle = (minPixel / (Constants.Vision.LIMELIGHT_HEIGHT_Y)) * Constants.Vision.LIMELIGHT_FOV_Y_DEGREES + Constants.Vision.LIMELIGHT_MOUNTING_ANGLE_DEGREES;
     SmartDashboard.putNumber("Target Height Angle", targetHeightAngle);
     return targetHeightAngle;
   }

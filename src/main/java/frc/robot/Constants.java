@@ -244,8 +244,10 @@ public final class Constants {
       //    public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 27.0; // Landing
       public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 32.0; // Takeoff
       public static double GOAL_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
-      public static double LIMELIGHT_MOUNTING_ANGLE_DEGREES = 38.5;
+      public static double LIMELIGHT_MOUNTING_ANGLE_DEGREES = 39.0;
       public static double LIMELIGHT_MOUNTING_HEIGHT_METERS = Units.inchesToMeters(34.5);
+      public static double LIMELIGHT_FOV_Y_DEGREES = 24.85;
+      public static double LIMELIGHT_HEIGHT_Y = 240;
       public static double INTAKE_CAMERA_MOUNTING_ANGLE_DEGREES = 34.3;
       public static double INTAKE_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
       public static double UPPER_HUB_HEIGHT_METERS = Units.inchesToMeters(104.0);
