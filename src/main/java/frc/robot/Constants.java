@@ -57,7 +57,7 @@ public final class Constants {
     // Climber motors have 2 stages: 10T to 72T and 36T to 72T. This ratio is input speed / output
     // speed
 
-    public static final double climberHeightUpperLimit = 4.25; // Upper limit of the climber OUTPUT
+    public static final double climberHeightUpperLimit = 2.6;//4.25; // Upper limit of the climber OUTPUT
     public static final double climberEncoderUpperLimit =
         climberHeightUpperLimit * encoderUnitsPerRotation * climberGearRatio;
     // Upper limit of the climber MOTOR
@@ -309,8 +309,8 @@ public final class Constants {
 
     //    public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 27.0; // Landing
     public static double GOAL_CAMERA_MOUNTING_ANGLE_DEGREES = 32.0; // Takeoff
-    public static double GOAL_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
-    public static double LIMELIGHT_MOUNTING_ANGLE_DEGREES = 36.0;
+    public static double GOAL_CAMERA_MOUNTING_HEIGHT_METERS = 0.87;
+    public static double LIMELIGHT_MOUNTING_ANGLE_DEGREES = 40.3;
     public static double LIMELIGHT_MOUNTING_HEIGHT_METERS = Units.inchesToMeters(34.5);
     public static double INTAKE_CAMERA_MOUNTING_ANGLE_DEGREES = 34.3;
     public static double INTAKE_CAMERA_MOUNTING_HEIGHT_METERS = 1.0;
